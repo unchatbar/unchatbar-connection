@@ -60,23 +60,19 @@ BrokerProvider.setLocalStorage([TRUE/FALSE]);
 ```
 
 * create Data channel to client
- ```javascript
+```javascript
     BrokerProvider.connect([CLIENTID]);
 ```
 
 * create Stream channel to client
- ```javascript
+```javascript
     BrokerProvider.connectStream([CLIENTID],[STREAM],[METADATA]);
 ```
 * get PeerId for active Broker connection
- ```javascript
+```javascript
     BrokerProvider.getPeerId();
 ```
 * get PeerId from client storage
  ```javascript
     BrokerProvider.getPeerIdFromStorage();
 ```
-
-
-
-
