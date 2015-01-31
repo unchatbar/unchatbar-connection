@@ -47,6 +47,7 @@ BrokerProvider.setPath([PATH]);
  ```javascript
 BrokerProvider.setLocalStorage([TRUE/FALSE]);
 ```
+
 ## Usage
 * define peerId for Broker server connection
  ```javascript
