@@ -73,6 +73,6 @@ BrokerProvider.setLocalStorage([TRUE/FALSE]);
     BrokerProvider.getPeerId();
 ```
 * get PeerId from client storage
- ```javascript
+```javascript
     BrokerProvider.getPeerIdFromStorage();
 ```
