@@ -1,4 +1,4 @@
-# Unchatbar
+# Unchatbar Connection
 [![Build Status](https://travis-ci.org/unchatbar/unchatbar-connection.svg?branch=master)](https://travis-ci.org/unchatbar/unchatbar)
 
 Peer to peer chat application using WebRTC technologies
@@ -47,6 +47,7 @@ BrokerProvider.setPath([PATH]);
  ```javascript
 BrokerProvider.setLocalStorage([TRUE/FALSE]);
 ```
+
 ## Usage
 * define peerId for Broker server connection
  ```javascript
@@ -59,23 +60,19 @@ BrokerProvider.setLocalStorage([TRUE/FALSE]);
 ```
 
 * create Data channel to client
- ```javascript
+```javascript
     BrokerProvider.connect([CLIENTID]);
 ```
 
 * create Stream channel to client
- ```javascript
+```javascript
     BrokerProvider.connectStream([CLIENTID],[STREAM],[METADATA]);
 ```
 * get PeerId for active Broker connection
- ```javascript
+```javascript
     BrokerProvider.getPeerId();
 ```
 * get PeerId from client storage
- ```javascript
+```javascript
     BrokerProvider.getPeerIdFromStorage();
 ```
-
-
-
-
