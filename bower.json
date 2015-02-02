@@ -16,6 +16,7 @@
     "app/scripts/*.js",
     "app/scripts/provider/*.js",
     "app/scripts/service/*.js",
+    "app/scripts/directive/*.js",
     "app/scripts/controller/*.js"
   ],
   "devDependencies": {
