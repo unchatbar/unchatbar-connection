@@ -33,6 +33,12 @@ angular.module('unchatbar-connection').run(['$rootScope', '$state', 'Broker', 'M
             Stream.callToGroupUsersFromClient(data.peerId, data.message.users);
         });
 
+        $rootScope.$on('profileUpdate', function (event, data) {
+            _.forEach(Connection.getMap(), function (connection, peerId) {
+                Connection.send(peerId, {action: 'profile', profile: this.get()});
+            }.bind(this));
+        });
+
         $rootScope.$on('BrokerPeerConnection', function (event, data) {
             Connection.add(data.connection);
         });
