@@ -1,18 +1,16 @@
 'use strict';
 
 describe('Serivce: MessageText', function () {
-    var BrokerService, rootScope, sessionStorage,NotifyService, MessageTextService, PhoneBookService, ConnectionService;
+    var BrokerService, rootScope, sessionStorage,MessageTextService, PhoneBookService, ConnectionService;
     beforeEach(module('unchatbar-connection'));
 
 
-    beforeEach(inject(function ($rootScope, MessageText, Broker, $sessionStorage, PhoneBook, Connection, Notify) {
+    beforeEach(inject(function ($rootScope, MessageText, Broker, $sessionStorage, Connection) {
         rootScope = $rootScope;
         MessageTextService = MessageText;
         BrokerService = Broker;
         sessionStorage = $sessionStorage;
-        PhoneBookService = PhoneBook;
         ConnectionService = Connection;
-        NotifyService = Notify;
     }));
 
     describe('check methode', function () {
@@ -133,11 +131,11 @@ describe('Serivce: MessageText', function () {
             describe('send to group', function () {
                 beforeEach(function () {
                     MessageTextService._selectedRoom = {type: 'group', id: 'xx'};
-                    MessageTextService.send('messageText');
+                    MessageTextService.send('messageText',[{id:'user'}]);
 
                 });
                 it('should call `MessageText._sendToGroup`', function () {
-                    expect(MessageTextService._sendToGroup).toHaveBeenCalledWith('messageText');
+                    expect(MessageTextService._sendToGroup).toHaveBeenCalledWith('messageText',[{id:'user'}]);
                 });
                 it('should call `MessageText._sendToGroup`', function () {
                     expect(MessageTextService._addStoStorage).toHaveBeenCalledWith('xx', 'xx', {
@@ -234,47 +232,31 @@ describe('Serivce: MessageText', function () {
             });
 
             it('should call `MessageText._getMessageObject` with `updateUserGroup` and text object', function () {
-                spyOn(PhoneBookService, 'getGroup').and.returnValue({owner: 'other'});
                 MessageTextService.sendRemoveGroup('roomId');
 
                 expect(MessageTextService._getMessageObject).toHaveBeenCalledWith('removeGroup', {roomId: 'roomId'});
-            });
-            it('should call `PhoneBook.getGroup` with room id', function () {
-                spyOn(BrokerService, 'getPeerId').and.returnValue('Otheruser');
-                spyOn(PhoneBookService, 'getGroup').and.returnValue({owner: 'other'});
-                MessageTextService.sendRemoveGroup('roomId');
-
-                expect(PhoneBookService.getGroup).toHaveBeenCalledWith('roomId');
             });
 
             describe('group owner is actual user', function () {
                 beforeEach(function () {
                     spyOn(BrokerService, 'getPeerId').and.returnValue('userPeerId');
-                    spyOn(PhoneBookService, 'getGroup').and.returnValue({
-                        owner: 'userPeerId',
-                        users: [{id: 'user1'}]
-                    });
                 });
                 it('should call `Connection.send` to ower', function () {
-                    MessageTextService.sendRemoveGroup('roomId');
+                    MessageTextService.sendRemoveGroup('roomId',[{id: 'user1'}]);
                     expect(ConnectionService.send).toHaveBeenCalledWith('user1', 'message');
                 });
 
                 it('should call `Connection.send` to users', function () {
-                    MessageTextService.sendRemoveGroup('roomId');
+                    MessageTextService.sendRemoveGroup('roomId',[{id: 'user1'}]);
                     expect(MessageTextService._addToQueue).toHaveBeenCalledWith('user1', 'message');
                 });
             });
             describe('group owner is actual user', function () {
                 beforeEach(function () {
                     spyOn(BrokerService, 'getPeerId').and.returnValue('userPeerId');
-                    spyOn(PhoneBookService, 'getGroup').and.returnValue({
-                        owner: 'userPeerId',
-                        users: [{id: 'userPeerId'}]
-                    });
                 });
                 it('should call `Connection.send` to ower', function () {
-                    MessageTextService.sendRemoveGroup('roomId');
+                    MessageTextService.sendRemoveGroup('roomId',[{id: 'userPeerId'}]);
                     expect(ConnectionService.send).not.toHaveBeenCalled();
                 });
             });
@@ -410,9 +392,9 @@ describe('Serivce: MessageText', function () {
             });
             it('should call `MessageText._getMessageObject` with `textMessage` and text object', function () {
                 spyOn(ConnectionService, 'send').and.returnValue(true);
-                spyOn(PhoneBookService, 'getGroup').and.returnValue({id: 'groupId', owner: 'clientPeerId', users: []});
 
-                MessageTextService._sendToGroup('test messageText');
+                MessageTextService._selectedRoom.id = 'groupId';
+                MessageTextService._sendToGroup('test messageText',[]);
                 expect(MessageTextService._getMessageObject).toHaveBeenCalledWith('textMessage', {
                     text: 'test messageText',
                     groupId: 'groupId'
@@ -421,22 +403,16 @@ describe('Serivce: MessageText', function () {
             });
 
             it('should return message object', function () {
-                spyOn(PhoneBookService, 'getGroup').and.returnValue({id: 'groupId', owner: 'clientPeerId', users: []});
-                expect(MessageTextService._sendToGroup('test text')).toEqual('message');
+                //spyOn(PhoneBookService, 'getGroup').and.returnValue({id: 'groupId', owner: 'clientPeerId', users: []});
+                expect(MessageTextService._sendToGroup('test text',[])).toEqual('message');
             });
 
             describe('user is sender', function () {
-                beforeEach(function () {
-                    spyOn(PhoneBookService, 'getGroup').and.returnValue({
-                        id: 'groupId',
-                        owner: 'otherPeerId',
-                        users: [{id: 'clientPeerId'}]
-                    });
-                });
+
                 it('should not send to own ', function () {
                     spyOn(ConnectionService, 'send').and.returnValue(true);
 
-                    MessageTextService._sendToGroup('test text');
+                    MessageTextService._sendToGroup('test text',[{id: 'clientPeerId'}]);
 
                     expect(ConnectionService.send).not.toHaveBeenCalled();
                 });
@@ -444,21 +420,14 @@ describe('Serivce: MessageText', function () {
             });
 
             describe('sender is owner', function () {
-                beforeEach(function () {
-                    spyOn(PhoneBookService, 'getGroup').and.returnValue({
-                        owner: 'clientPeerId',
-                        id: 'groupId',
-                        users: [{id: 'userId'}]
-                    });
-                });
                 it('should call `Connection.send` with userId id', function () {
                     spyOn(ConnectionService, 'send').and.returnValue(true);
-                    MessageTextService._sendToGroup('test text');
+                    MessageTextService._sendToGroup('test text',[{id: 'userId'}]);
                     expect(ConnectionService.send).toHaveBeenCalledWith('userId', 'message');
                 });
                 it('should not call `MessageText._addToQueue` with userId id', function () {
                     spyOn(ConnectionService, 'send').and.returnValue(true);
-                    MessageTextService._sendToGroup('test text');
+                    MessageTextService._sendToGroup('test text',[{id: 'userId'}]);
                     expect(MessageTextService._addToQueue).toHaveBeenCalledWith('userId', 'message');
                 });
             });

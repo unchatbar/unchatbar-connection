@@ -40,8 +40,8 @@ angular.module('unchatbar-connection')
          * store send receive text messages
          *
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'PhoneBook', 'Connection',
-            function ($rootScope, $localStorage, $sessionStorage, Broker, PhoneBook, Connection) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'Connection',
+            function ($rootScope, $localStorage, $sessionStorage, Broker,  Connection) {
 
 
                 var api =  {
@@ -167,18 +167,19 @@ angular.module('unchatbar-connection')
                      * @name send
                      * @methodOf unchatbar-connection.MessageText
                      * @params {String} text message text
+                     * @params {Array} users users for send group message
                      * @description
                      *
                      * send message to active room
                      *
                      */
-                    send: function (text) {
+                    send: function (text,users) {
                         var message = {};
                         if (this._selectedRoom.type) {
                             if (this._selectedRoom.type === 'user') {
                                 message = this._sendToUser(text);
                             } else if (this._selectedRoom.type === 'group') {
-                                message = this._sendToGroup(text);
+                                message = this._sendToGroup(text,users);
                             }
                             message.own = true;
                             this._addStoStorage(this._selectedRoom.id, this._selectedRoom.id, message);
@@ -219,13 +220,12 @@ angular.module('unchatbar-connection')
                      * send message for delete room, to all users from group
                      *
                      */
-                    sendRemoveGroup: function (roomId) {
+                    sendRemoveGroup: function (roomId,users) {
                         var groupUsers = {}, message = {};
-                        groupUsers = PhoneBook.getGroup(roomId).users;
                         message = this._getMessageObject( 'removeGroup',{
                             roomId: roomId
                         });
-                        _.forEach(groupUsers, function (user) {
+                        _.forEach(users, function (user) {
                             if (Broker.getPeerId() !== user.id) {
                                 if (user.id !== Broker.getPeerId()) {
                                     Connection.send(user.id, message);
@@ -396,19 +396,19 @@ angular.module('unchatbar-connection')
                      * @methodOf unchatbar-connection.MessageText
                      * @private
                      * @params {String} text mesage text
+                     * @params {Array} users users for send message
                      * @returns {Object} message object
                      * @description
                      *
                      * send message to all users from active group room
                      *
                      */
-                    _sendToGroup: function (text) {
-                        var group = PhoneBook.getGroup(this._selectedRoom.id),
-                            message = this._getMessageObject( 'textMessage',{
-                                groupId: group.id,
+                    _sendToGroup: function (text,users) {
+                        var message = this._getMessageObject( 'textMessage',{
+                                groupId: api._selectedRoom.id,
                                 text: text
                             });
-                        _.forEach(group.users, function (user) {
+                        _.forEach(users, function (user) {
                             if (user.id !== Broker.getPeerId()) {
                                 Connection.send(user.id, message);
                                 this._addToQueue(user.id, message);

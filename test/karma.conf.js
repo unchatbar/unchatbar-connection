@@ -18,15 +18,20 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'bower_components/angular/angular.js',
-            'bower_components/peerjs/peer.js',
+            // bower:
             'bower_components/es5-shim/es5-shim.js',
-            'bower_components/angular-notify/dist/angular-notify.js',
+            'bower_components/angular/angular.js',
+            'bower_components/json3/lib/json3.js',
+            'bower_components/peerjs/peer.js',
             'bower_components/ngstorage/ngStorage.js',
-            'bower_components/angular-ui-router/release/angular-ui-router.js',
             'bower_components/lodash/dist/lodash.compat.js',
-            'bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js',
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+            'bower_components/unchatbar-user/app/scripts/app.js',
+            'bower_components/unchatbar-user/app/scripts/run.js',
+            'bower_components/unchatbar-user/app/scripts/provider/profile.js',
+            'bower_components/unchatbar-user/app/scripts/controller/profile.js',
+            'bower_components/unchatbar-user/app/scripts/directive/profile-admin.js',
+            'bower_components/unchatbar-user/app/scripts/directive/profile.js',
+            // endbower
             'bower_components/angular-mocks/angular-mocks.js',
             'app/scripts/constants.js',
             'app/scripts/**/*.js',

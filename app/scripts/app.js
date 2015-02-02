@@ -10,5 +10,6 @@
  */
 angular.module('unchatbar-connection', [
     'constants',
+    'unchatbar-user',
     'ngStorage'
 ]);
