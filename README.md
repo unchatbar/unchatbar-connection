@@ -44,7 +44,7 @@ BrokerProvider.setPort([PORT]);
 BrokerProvider.setPath([PATH]);
 ```
 * define use lcoal storage, for store peerId
- ```javascript
+```javascript
 BrokerProvider.setLocalStorage([TRUE/FALSE]);
 ```
 
