@@ -15,7 +15,7 @@ angular.module('unchatbar-connection').directive('dialer', [
     function ( ) {
         return {
             restrict: 'E',
-            templateUrl: 'views/peer/dialer.html',
+            templateUrl: 'views/unchatbar-connection/dialer.html',
             controller: 'dialer'
         };
     }
