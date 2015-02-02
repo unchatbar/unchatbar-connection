@@ -7,7 +7,7 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar-connection').run(['$rootScope', '$state', 'Broker', 'MessageText', 'PhoneBook', 'Profile', 'Connection', 'Stream',
+angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'MessageText',  'Connection', 'Stream',
     function ($rootScope, Broker, MessageText, Connection, Stream) {
         Broker.initStorage();
 
