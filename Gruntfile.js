@@ -443,9 +443,7 @@ module.exports = function (grunt) {
                 src:      'views/**/*.html',
                 dest:     'app/scripts/template.js',
                 options:  {
-                    bootstrap:  function() {
-                        return '//no templates';
-                    }
+                    module : '<%= yeoman.appName %>'
                 }
             }
         }
