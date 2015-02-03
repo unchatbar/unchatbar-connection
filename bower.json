@@ -9,7 +9,7 @@
     "peerjs": "~0.3.14",
     "ngstorage": "~0.3.0",
     "lodash": "~2.4.1",
-    "unchatbar-user" : "git@github.com:unchatbar/unchatbar-user.git"
+    "unchatbar-user" : "https://github.com/unchatbar/unchatbar-user.git"
   },
   "main": [
     "app/scripts/app.js",
