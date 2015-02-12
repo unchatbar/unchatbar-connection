@@ -7,20 +7,20 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'dataConnection',
-    function ($rootScope, Broker,dataConnection) {
+angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'DataConnection',
+    function ($rootScope, Broker,DataConnection) {
         Broker.initStorage();
 
         $rootScope.$on('BrokerPeerConnection', function (event, data) {
-            dataConnection.add(data.connection);
+            DataConnection.add(data.connection);
         });
 
-        $rootScope.$on('ConnectionOpen', function (event, data) {
-            dataConnection.sendFromQueue(data.peerId);
+        $rootScope.$on('dataConnectionOpen', function (event, data) {
+            DataConnection.sendFromQueue(data.peerId);
         });
 
-        $rootScope.$on('ConnectionGetMessagereadMessage', function (event, data) {
-            dataConnection.removeFromQueue(data.peerId, data.message.id);
+        $rootScope.$on('ConnectionGetMessage_readMessage', function (event, data) {
+            DataConnection.removeFromQueue(data.peerId, data.message.id);
         });
     }
 ]);
