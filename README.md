@@ -13,6 +13,18 @@ Peer to peer chat application using WebRTC technologies
 * Clone repository `git clone git://github.com/unchatbar/unchatbar.git`
 * Run `npm install` to install required Node.js modules
 * Run `bower install` to install required Bower components
+
+
+## Dependencies
+* angular
+* json3
+* es5-shim
+* bootstrap-css-only
+* ngstorage
+* lodash
+* peerjs
+* unchatbar-user
+
 ## Get Started
 ```javascript
 angular.module('app', ['unchatbar-connection'])
