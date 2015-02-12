@@ -40,8 +40,8 @@ angular.module('unchatbar-connection')
          * store send receive text messages
          *
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'Connection',
-            function ($rootScope, $localStorage, $sessionStorage, Broker,  Connection) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker',
+            function ($rootScope, $localStorage, $sessionStorage, Broker  ) {
 
 
                 var api =  {
