@@ -110,7 +110,7 @@ angular.module('unchatbar-connection')
                              * new connection to client is open
                              *
                              */
-                            $rootScope.$broadcast('ConnectionOpen', {peerId: this.peer});
+                            $rootScope.$broadcast('dataConnectionOpen', {peerId: this.peer});
                         });
                         connection.on('close', function () {
                             delete api._connectionMap[this.peer];

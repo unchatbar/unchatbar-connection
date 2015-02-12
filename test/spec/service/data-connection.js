@@ -76,7 +76,7 @@ describe('Serivce: dataConnection', function () {
 
                 it('should broadcast connection open', function () {
                     peerCallBack.open('newPeerId');
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('ConnectionOpen', {peerId: 'peerId'});
+                    expect(rootScope.$broadcast).toHaveBeenCalledWith('dataConnectionOpen', {peerId: 'peerId'});
                 });
             });
 
