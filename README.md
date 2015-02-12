@@ -37,6 +37,7 @@ angular.module('app', ['unchatbar-connection'])
 ```javascript
 BrokerProvider.setHost([HOSTNAME]);
 ```
+
 * configure Broker Host
 
 >
@@ -47,6 +48,7 @@ BrokerProvider.addIceServer({
     username : [USERNAME]
 });
 ```
+
 * define secure connection for Broker Server
 
 >
@@ -60,6 +62,7 @@ BrokerProvider.setSecureConnection([TRUE/FALSE]);
 ```javascript
 BrokerProvider.setPort([PORT]);
 ```
+
 * define setPath for Broker Server
 
 >
@@ -78,14 +81,13 @@ BrokerProvider.setLocalStorage([TRUE/FALSE]);
 
 >
 ```javascript
-DataConnectionProvider..setLocalStorage([TRUE/FALSE]);
+DataConnectionProvider.setLocalStorage([TRUE/FALSE]);
 ```
-
-
 
 ## Usage
 
 ### Broker
+
 * define peerId for Broker server connection
 
 >
@@ -106,6 +108,7 @@ BrokerProvider.connectServer();
 ```javascript
 BrokerProvider.connectStream([CLIENTID],[STREAM],[METADATA]);
 ```
+
 * get PeerId for active Broker connection
 
 >
@@ -121,11 +124,12 @@ BrokerProvider.getPeerIdFromStorage();
 ```
 
 ### DataConnection
+
 * send text message to client
 
 >
 ```javascript
-DataConnection.send([CLIENTPEERID],[TEXTMESSAGE],[ACTION],[METADATA]);
+DataConnection.send([CLIENT-PEER-ID],[TEXT-MESSAGE],[ACTION-NAME],[METADATA]);
 ```
 
 
