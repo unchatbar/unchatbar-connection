@@ -3,20 +3,20 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name unchatbar-connection.MessageTextProvider
+ * @name unchatbar-connection.DataConnection
  * @description
  *
  * data connection
  *
  */
 angular.module('unchatbar-connection')
-    .provider('dataConnection', function () {
+    .provider('DataConnection', function () {
         var useLocalStorage = false;
 
         /**
          * @ngdoc methode
          * @name setLocalStorage
-         * @methodOf unchatbar-connection.MessageTextProvider
+         * @methodOf unchatbar-connection.DataConnection
          * @description
          *
          * use local storage for store messages
@@ -28,7 +28,7 @@ angular.module('unchatbar-connection')
 
         /**
          * @ngdoc service
-         * @name unchatbar-connection.MessageText
+         * @name unchatbar-connection.DataConnection
          * @require $rootScope
          * @require $sessionStorage
          * @require $localStorage
@@ -49,7 +49,7 @@ angular.module('unchatbar-connection')
                     /**
                      * @ngdoc methode
                      * @name _connectionMap
-                     * @propertyOf unchatbar-connection.Connection
+                     * @propertyOf unchatbar-connection.DataConnection
                      * @private
                      * @returns {Object} connection storage
                      *
@@ -58,27 +58,27 @@ angular.module('unchatbar-connection')
 
                     /**
                      * @ngdoc methode
-                     * @name _storageMessages
-                     * @propertyOf unchatbar-connection.Broker
+                     * @name _storage
+                     * @propertyOf unchatbar-connection.DataConnection
                      * @private
                      * @returns {Object} message storage
                      *
                      */
-                    _storageMessages: {
+                    _storage: {
                         queue: {}
                     },
 
                     /**
                      * @ngdoc methode
                      * @name initStorage
-                     * @methodOf unchatbar-connection.MessageText
+                     * @methodOf unchatbar-connection.DataConnection
                      * @description
                      *
                      * init storage
                      */
                     initStorage: function () {
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                        this._storageMessages = storage.$default({
+                        this._storage = storage.$default({
                             dataConnection: {
                                 queue: {}
                             }
@@ -88,7 +88,7 @@ angular.module('unchatbar-connection')
                     /**
                      * @ngdoc methode
                      * @name add
-                     * @methodOf unchatbar-connection.Connection
+                     * @methodOf unchatbar-connection.DataConnection
                      * @param {Object} connection client connection
                      * @private
                      * @description
@@ -102,7 +102,7 @@ angular.module('unchatbar-connection')
                             /**
                              * @ngdoc event
                              * @name ConnectionOpen
-                             * @eventOf unchatbar-connection.Connection
+                             * @eventOf unchatbar-connection.DataConnection
                              * @eventType broadcast on root scope
                              * @param {String} peerId id of client
                              * @description
@@ -125,7 +125,7 @@ angular.module('unchatbar-connection')
                                 /**
                                  * @ngdoc event
                                  * @name ConnectionGetMessage[action]
-                                 * @eventOf unchatbar-connection.Connection
+                                 * @eventOf unchatbar-connection.DataConnection
                                  * @eventType broadcast on root scope
                                  * @param {String} peerId id of client
                                  * @param {Object} message message object
@@ -148,7 +148,7 @@ angular.module('unchatbar-connection')
                     /**
                      * @ngdoc methode
                      * @name send
-                     * @methodOf unchatbar-connection.MessageText
+                     * @methodOf unchatbar-connection.DataConnection
                      * @params {String} text message text
                      * @params {Array} users users for send group message
                      * @description
@@ -156,23 +156,25 @@ angular.module('unchatbar-connection')
                      * send message to active room
                      *
                      */
-                    send: function (peerId,text,action) {
+                    send: function (peerId,text,action,meta) {
                         var message = {};
                         message.text = text;
                         message.id =  this._createUUID();
                         message.action =  action;
+                        message.meta =  meta || {};
+
                         if (this._connectionMap[peerId]) {
                             this._connectionMap[peerId].send(message);
                         } else {
                             Broker.connect(peerId);
                         }
-                        this._addToQueue(user.id, message);
+                        this._addToQueue(peerId, message);
                     },
 
                     /**
                      * @ngdoc methode
                      * @name _createUUID
-                     * @methodOf unchatbar-connection.MessageText
+                     * @methodOf unchatbar-connection.DataConnection
                      * @private
                      * @description
                      *
@@ -191,7 +193,7 @@ angular.module('unchatbar-connection')
                     /**
                      * @ngdoc methode
                      * @name sendFromQueue
-                     * @methodOf unchatbar-connection.MessageText
+                     * @methodOf unchatbar-connection.DataConnection
                      * @private
                      * @params {String} peerId id of client
                      * @description
@@ -200,9 +202,9 @@ angular.module('unchatbar-connection')
                      *
                      */
                     sendFromQueue: function (peerId) {
-                        if (this._storageMessages.queue[peerId]) {
-                            _.forEach(this._storageMessages.queue[peerId], function (message) {
-                                Connection.send(peerId, message);
+                        if (this._storage.queue[peerId]) {
+                            _.forEach(this._storage.queue[peerId], function (message) {
+                                this._connectionMap[peerId].send( message);
                             }.bind(this));
                         }
                     },
@@ -211,7 +213,7 @@ angular.module('unchatbar-connection')
                     /**
                      * @ngdoc methode
                      * @name sendFromQueue
-                     * @methodOf unchatbar-connection.MessageText
+                     * @methodOf unchatbar-connection.DataConnection
                      * @private
                      * @params {String} peerId id of client
                      * @description
@@ -220,13 +222,13 @@ angular.module('unchatbar-connection')
                      *
                      */
                     removeFromQueue: function (peerId,messageId) {
-                        if (this._storageMessages.queue[peerId] &&
-                            this._storageMessages.queue[peerId][messageId]
+                        if (this._storage.queue[peerId] &&
+                            this._storage.queue[peerId][messageId]
                         ) {
-                            delete this._storageMessages.queue[peerId][messageId];
+                            delete this._storage.queue[peerId][messageId];
                         }
-                        if (_.size(this._storageMessages.queue[peerId]) === 0) {
-                            delete this._storageMessages.queue[peerId];
+                        if (_.size(this._storage.queue[peerId]) === 0) {
+                            delete this._storage.queue[peerId];
                         }
                     },
 
@@ -234,7 +236,7 @@ angular.module('unchatbar-connection')
                     /**
                      * @ngdoc methode
                      * @name _addToQueue
-                     * @methodOf unchatbar-connection.MessageText
+                     * @methodOf unchatbar-connection.DataConnection
                      * @private
                      * @params {String} peerId id of client
                      * @returns {Object} message object
@@ -244,10 +246,10 @@ angular.module('unchatbar-connection')
                      *
                      */
                     _addToQueue: function (peerId, message) {
-                        if (!this._storageMessages.queue[peerId]) {
-                            this._storageMessages.queue[peerId] = {};
+                        if (!this._storage.queue[peerId]) {
+                            this._storage.queue[peerId] = {};
                         }
-                        this._storageMessages.queue[peerId][message.id] = message;
+                        this._storage.queue[peerId][message.id] = message;
                     }
 
                 };
