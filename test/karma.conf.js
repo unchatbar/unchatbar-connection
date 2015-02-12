@@ -27,6 +27,7 @@ module.exports = function (config) {
             'bower_components/lodash/dist/lodash.compat.js',
             'bower_components/unchatbar-user/app/scripts/app.js',
             'bower_components/unchatbar-user/app/scripts/run.js',
+            'bower_components/unchatbar-user/app/scripts/template.js',
             'bower_components/unchatbar-user/app/scripts/provider/profile.js',
             'bower_components/unchatbar-user/app/scripts/controller/profile.js',
             'bower_components/unchatbar-user/app/scripts/directive/profile-admin.js',

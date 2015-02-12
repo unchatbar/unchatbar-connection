@@ -13,21 +13,20 @@
  */
 angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
     function ($scope, Broker) {
-        /**
-         * @ngdoc property
-         * @name peerId
-         * @propertyOf unchatbar-connection.controller:dialer
-         * @returns {String} id from broker
-         */
-        $scope.peerId = Broker.getPeerId();
 
         /**
-         * @ngdoc property
-         * @name connectId
-         * @propertyOf unchatbar-connection.controller:dialer
-         * @returns {String} client id for connect
+         * @ngdoc methode
+         * @name getPeerId
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * connect to client
+         *
          */
-        $scope.connectId = '';
+        $scope.getPeerId = function() {
+            return Broker.getPeerId();
+        };
 
         /**
          * @ngdoc methode
@@ -42,10 +41,5 @@ angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
             Broker.connect($scope.connectId);
             $scope.connectId = '';
         };
-
-        $scope.$on('BrokerPeerOpen', function () {
-            $scope.peerId = Broker.getPeerId();
-
-        });
     }
 ]);

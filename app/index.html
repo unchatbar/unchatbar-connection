@@ -18,7 +18,10 @@
     <!-- endbuild -->
 </head>
 <body >
-<div ui-view></div>
+<h2>Connection ID</h2>
+<un-connection-peer-id></un-connection-peer-id>
+<h2>Dialer</h2>
+<un-connection-dialer></un-connection-dialer>
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
@@ -42,6 +45,7 @@
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/run.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/template.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/provider/profile.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/controller/profile.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/directive/profile-admin.js"></script>
@@ -52,55 +56,34 @@
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/constants.js"></script>
 <script src="scripts/app.js"></script>
-<script src="scripts/template.js"></script>
-
+<!-- Provider -->
 <script src="scripts/provider/broker.js"></script>
-<script src="scripts/provider/profile.js"></script>
-<script src="scripts/provider/phone-book.js"></script>
+<script src="scripts/provider/data-connection.js"></script>
 <script src="scripts/provider/message-text.js"></script>
-
+<!-- Config -->
 
 <script src="scripts/config/server.js"></script>
-<script src="scripts/config/state.js"></script>
 
-<script src="scripts/service/stream.js"></script>
-
-<script src="scripts/controller/broker.js"></script>
-<script src="scripts/controller/phone-book.js"></script>
-<script src="scripts/controller/phone-book-admin.js"></script>
-<script src="scripts/controller/dialer.js"></script>
-<script src="scripts/controller/text-message-list.js"></script>
-<script src="scripts/controller/connection-center.js"></script>
-<script src="scripts/controller/profile.js"></script>
-<script src="scripts/controller/stream.js"></script>
-<script src="scripts/controller/modal-stream-option.js"></script>
-<script src="scripts/controller/notify.js"></script>
-
+<!-- Service -->
 <script src="scripts/service/peer.js"></script>
 <script src="scripts/service/connection.js"></script>
 <script src="scripts/service/stream.js"></script>
-<script src="scripts/service/notify.js"></script>
 
-<script src="scripts/directive/notification/stream-call.js"></script>
-<script src="scripts/directive/notification/text-message.js"></script>
-<script src="scripts/directive/stream/own-stream-video.js"></script>
-<script src="scripts/directive/stream/client-stream.js"></script>
-<script src="scripts/directive/stream/stream.js"></script>
-<script src="scripts/directive/stream/audio-stream.js"></script>
-<script src="scripts/directive/stream/video-stream.js"></script>
-<script src="scripts/directive/phoneBook/book-stream.js"></script>
-<script src="scripts/directive/phoneBook/new-group.js"></script>
-<script src="scripts/directive/phoneBook/book.js"></script>
-<script src="scripts/directive/phoneBook/book-admin.js"></script>
-<script src="scripts/directive/phoneBook/active-user.js"></script>
+<!-- Controller -->
+<script src="scripts/controller/dialer.js"></script>
 
-
-
+<!-- Directive -->
 <script src="scripts/directive/dialer.js"></script>
-<script src="scripts/directive/connection-center.js"></script>
-<script src="scripts/directive/text-message-list.js"></script>
-<script src="scripts/directive/profile.js"></script>
+<script src="scripts/directive/peerId.js"></script>
+<!-- run -->
 <script src="scripts/run.js"></script>
 <!-- endbuild -->
+
+<script>
+    angular.module('unchatbar-connection').run(['Broker',
+        function ( Broker) {
+            Broker.connectServer();
+        }]);
+</script>
 </body>
 </html>
