@@ -17,6 +17,7 @@ angular.module('unchatbar-connection').directive('unConnectionPeerId', [
             restrict: 'E',
             templateUrl: 'views/unchatbar-connection/peerId.html',
             controller: 'dialer',
+            transclude: true,
             link : function(scope){
 
                 /**

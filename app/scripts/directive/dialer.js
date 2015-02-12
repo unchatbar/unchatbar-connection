@@ -17,6 +17,7 @@ angular.module('unchatbar-connection').directive('unConnectionDialer', [
             restrict: 'E',
             templateUrl: 'views/unchatbar-connection/dialer.html',
             controller: 'dialer',
+            transclude: true,
             link : function(scope){
                 /**
                  * @ngdoc methode
