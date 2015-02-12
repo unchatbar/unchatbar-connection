@@ -140,7 +140,7 @@ DataConnection.send([CLIENT-PEER-ID],[TEXT-MESSAGE],[ACTION-NAME],[METADATA]);
 
 >
 ```html
-<un-contact-client-list></un-contact-client-list>
+<un-connection-dialer></un-connection-dialer>
 ```
 
 * output peer id from user
