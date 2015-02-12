@@ -34,6 +34,7 @@ module.exports = function (config) {
             'bower_components/unchatbar-user/app/scripts/directive/profile.js',
             // endbower
             'bower_components/angular-mocks/angular-mocks.js',
+            'test/mock/views/**/*.html',
             'app/scripts/constants.js',
             'app/scripts/**/*.js',
             'test/mock/**/*.js',
@@ -66,7 +67,8 @@ module.exports = function (config) {
         plugins: [
             'karma-phantomjs-launcher',
             'karma-jasmine',
-            'karma-coverage'
+            'karma-coverage',
+            'karma-ng-html2js-preprocessor'
         ],
 
         // Continuous Integration mode
@@ -85,7 +87,8 @@ module.exports = function (config) {
             // source files, that you wanna generate coverage for
             // do not include tests or libraries
             // (these files will be instrumented by Istanbul)
-            'app/scripts/**/*.js': ['coverage']
+            'app/scripts/**/*.js': ['coverage'],
+            'test/mock/views/**/*.html': ['ng-html2js']
         },
 
         // optionally, configure the reporter
