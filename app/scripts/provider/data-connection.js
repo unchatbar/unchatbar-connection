@@ -135,7 +135,7 @@ angular.module('unchatbar-connection')
                                  * `ConnectionGetMessage[data.action]`
                                  *
                                  */
-                                $rootScope.$broadcast('ConnectionGetMessage' + data.action,
+                                $rootScope.$broadcast('ConnectionGetMessage_' + data.action,
                                     {
                                         peerId: peerId,
                                         message: data

@@ -119,7 +119,7 @@ describe('Serivce: dataConnection', function () {
                 it('should broadcast message', function () {
                     peerCallBack.data({action: 'myAction', id: 'UUID'});
                     expect(rootScope.$broadcast).toHaveBeenCalledWith(
-                        'ConnectionGetMessagemyAction', {
+                        'ConnectionGetMessagemyAction_', {
                             peerId: 'peerId',
                             message: {action: 'myAction', id: 'UUID'}
                         });
