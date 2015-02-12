@@ -134,7 +134,13 @@ describe('Serivce: dataConnection', function () {
                 spyOn(BrokerService, 'connect').and.returnValue(true);
 
             });
+            it('should not call `dataConnection._addToQueue` when peerId is equal own peer id', function () {
+                spyOn(BrokerService, 'getPeerId').and.returnValue('testPeerId');
+                DataConnectionService.send('testPeerId', 'myMessage', 'testAction', {meta: 'test'});
+                expect(DataConnectionService._addToQueue).not.toHaveBeenCalled();
+            });
             it('should call `dataConnection._addToQueue` with peerId and message object', function () {
+                spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
                 DataConnectionService.send('testPeerId', 'myMessage', 'testAction', {meta: 'test'});
                 expect(DataConnectionService._addToQueue).toHaveBeenCalledWith(
                     'testPeerId', {text: 'myMessage', id: 'testUUID', action: 'testAction', meta: {meta: 'test'}}
@@ -142,6 +148,7 @@ describe('Serivce: dataConnection', function () {
             });
             describe('connection-id exists', function () {
                 beforeEach(function () {
+                    spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
                     DataConnectionService._connectionMap = {
                         'peerId': {
                             open: true,
@@ -168,8 +175,9 @@ describe('Serivce: dataConnection', function () {
             });
 
             describe('connection id not exists', function () {
-                beforeEach(function () {
 
+                beforeEach(function () {
+                    spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
                     DataConnectionService._connectionMap = {};
                 });
 

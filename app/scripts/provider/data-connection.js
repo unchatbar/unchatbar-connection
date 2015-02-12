@@ -157,18 +157,20 @@ angular.module('unchatbar-connection')
                      *
                      */
                     send: function (peerId,text,action,meta) {
-                        var message = {};
-                        message.text = text;
-                        message.id =  this._createUUID();
-                        message.action =  action;
-                        message.meta =  meta || {};
+                        if (Broker.getPeerId() !== peerId) {
+                            var message = {};
+                            message.text = text;
+                            message.id = this._createUUID();
+                            message.action = action;
+                            message.meta = meta || {};
 
-                        if (this._connectionMap[peerId]) {
-                            this._connectionMap[peerId].send(message);
-                        } else {
-                            Broker.connect(peerId);
+                            if (this._connectionMap[peerId]) {
+                                this._connectionMap[peerId].send(message);
+                            } else {
+                                Broker.connect(peerId);
+                            }
+                            this._addToQueue(peerId, message);
                         }
-                        this._addToQueue(peerId, message);
                     },
 
                     /**
