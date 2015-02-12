@@ -43,6 +43,10 @@ angular.module('unchatbar-connection').directive('unConnectionDialer', [
                 scope.init = function(){
                     scope.peerId = scope.getPeerId();
                 };
+
+                scope.$on('BrokerPeerOpen', function () {
+                    scope.init();
+                });
             }
         };
     }
