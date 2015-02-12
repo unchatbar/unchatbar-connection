@@ -26,8 +26,8 @@ describe('Controller: dialer', function () {
         describe('getPeerId', function () {
             it('should return value from `Broker.getPeerId``', function () {
                 spyOn(brokerService, 'getPeerId').and.returnValue('peerId');
-
-                expect(scope.getPeerId()).toBe('peerId');
+                scope.getPeerId()
+                expect(scope.peerId).toBe('peerId');
             });
         });
         describe('connect', function () {

@@ -13,6 +13,17 @@
  */
 angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
     function ($scope, Broker) {
+        /**
+         * @ngdoc methode
+         * @name peerId
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * client peer id
+         *
+         */
+        $scope.peerId = $scope.peerId || '';
 
         /**
          * @ngdoc methode
@@ -25,7 +36,7 @@ angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
          *
          */
         $scope.getPeerId = function() {
-            return Broker.getPeerId();
+            $scope.peerId = Broker.getPeerId();
         };
 
         /**

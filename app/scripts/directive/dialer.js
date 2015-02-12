@@ -19,35 +19,10 @@ angular.module('unchatbar-connection').directive('unConnectionDialer', [
             controller: 'dialer',
             transclude: true,
             link : function(scope){
-                /**
-                 * @ngdoc methode
-                 * @name peerId
-                 * @propertyOf unchatbar-connection.directive:dialer
-                 * @return {String} peerId from Broker
-                 * @description
-                 *
-                 * client peer id
-                 *
-                 */
-                scope.peerId = '';
-
-                /**
-                 * @ngdoc methode
-                 * @name getPeerId
-                 * @methodOf unchatbar-connection.directive:unConnectionPeerID
-                 * @return {String} peerId from Broker
-                 * @description
-                 *
-                 * init
-                 *
-                 */
-                scope.init = function(){
-                    scope.peerId = scope.getPeerId();
-                };
-
                 scope.$on('BrokerPeerOpen', function () {
-                    scope.init();
+                    scope.getPeerId();
                 });
+                scope.getPeerId();
             }
         };
     }
