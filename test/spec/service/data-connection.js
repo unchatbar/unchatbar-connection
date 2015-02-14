@@ -92,7 +92,10 @@ describe('Serivce: dataConnection', function () {
 
             describe('listener `data`', function () {
                 beforeEach(function () {
-                    spyOn(DataConnectionService, 'send').and.returnValue(true);
+                    DataConnectionService._connectionMap.peerId = {
+                        send : function(){}
+                    }
+                    spyOn(DataConnectionService._connectionMap.peerId, 'send').and.returnValue(true);
                 });
                 it('should call DataConnectionService.data ', function () {
                     expect(connection.on).toHaveBeenCalledWith('data', jasmine.any(Function));
@@ -103,7 +106,7 @@ describe('Serivce: dataConnection', function () {
                         action: 'myAction',
                         id: 'UUID'
                     });
-                    expect(DataConnectionService.send).toHaveBeenCalledWith('peerId',
+                    expect(DataConnectionService._connectionMap.peerId.send).toHaveBeenCalledWith('peerId',
                         {action: 'readMessage', id: 'UUID'}
                     );
                 });
@@ -113,7 +116,7 @@ describe('Serivce: dataConnection', function () {
                         action: 'readMessage',
                         id: 'UUID'
                     });
-                    expect(DataConnectionService.send).not.toHaveBeenCalled();
+                    expect(DataConnectionService._connectionMap.peerId.send).not.toHaveBeenCalled();
                 });
 
                 it('should broadcast message', function () {

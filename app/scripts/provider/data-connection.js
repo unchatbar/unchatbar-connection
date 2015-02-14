@@ -120,7 +120,7 @@ angular.module('unchatbar-connection')
 
                             $rootScope.$apply(function () {
                                 if(data.action !== 'readMessage' && data.id) {
-                                    api.send(peerId, {action: 'readMessage', id: data.id});
+                                    api._connectionMap[peerId].send(peerId, {action: 'readMessage',id: data.id})
                                 }
                                 /**
                                  * @ngdoc event
@@ -207,6 +207,7 @@ angular.module('unchatbar-connection')
                         if (this._storage.queue[peerId]) {
                             _.forEach(this._storage.queue[peerId], function (message) {
                                 this._connectionMap[peerId].send( message);
+                                api.removeFromQueue(peerId,message.id)
                             }.bind(this));
                         }
                     },
