@@ -19,30 +19,16 @@ describe('Controller: dialer', function () {
         };
     }));
 
-    describe('check init', function () {
-        it('should set `$scope.peerId`to rturn value from `Broker.getPeerId`', function () {
-            spyOn(brokerService, 'getPeerId').and.returnValue('peerId');
-
-            dialerCTRL();
-
-            expect(scope.peerId).toEqual('peerId');
-        });
-
-
-
-        it('should set scope.connectId to empty string', function () {
-            spyOn(brokerService, 'getPeerId').and.returnValue('');
-
-            dialerCTRL();
-
-            expect(scope.connectId).toBe('');
-        });
-    });
-
     describe('check methode', function () {
         beforeEach(function () {
-            spyOn(brokerService, 'getPeerId').and.returnValue('');
             dialerCTRL();
+        });
+        describe('getPeerId', function () {
+            it('should return value from `Broker.getPeerId``', function () {
+                spyOn(brokerService, 'getPeerId').and.returnValue('peerId');
+                scope.getPeerId()
+                expect(scope.peerId).toBe('peerId');
+            });
         });
         describe('connect', function () {
             it('should call `broker.connect` width `$scope.connectId `', function () {
@@ -62,22 +48,26 @@ describe('Controller: dialer', function () {
                 expect(scope.connectId).toBe('');
             });
         });
-    });
-    describe('check event', function () {
-        describe('BrokerPeerOpen', function () {
-            it('should set `$scope.peerId` to test', function () {
-                var peerId = '';
-                spyOn(brokerService, 'getPeerId').and.callFake(function(){
-                    return peerId;
-                });
-                dialerCTRL();
-                peerId = 'test';
 
-                scope.$broadcast('BrokerPeerOpen', {});
+        describe('login', function () {
+            it('should call `broker.setPeerId` width `$scope.newPeerId `', function () {
+                spyOn(brokerService, 'setPeerId').and.returnValue('');
+                scope.newPeerId = 'test';
 
-                expect(scope.peerId).toBe('test');
+                scope.login();
+
+                expect(brokerService.setPeerId).toHaveBeenCalledWith('test');
+            });
+            it('should call `broker.connectServer`', function () {
+                spyOn(brokerService, 'connectServer').and.returnValue('');
+                scope.connectId = 'test';
+
+                scope.login();
+
+                expect(brokerService.connectServer).toHaveBeenCalled();
             });
         });
     });
+
 
 });

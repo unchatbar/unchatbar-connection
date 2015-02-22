@@ -14,20 +14,53 @@
 angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
     function ($scope, Broker) {
         /**
-         * @ngdoc property
+         * @ngdoc methode
          * @name peerId
-         * @propertyOf unchatbar-connection.controller:dialer
-         * @returns {String} id from broker
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * client peer id
+         *
          */
-        $scope.peerId = Broker.getPeerId();
+        $scope.peerId = $scope.peerId || '';
 
         /**
-         * @ngdoc property
-         * @name connectId
-         * @propertyOf unchatbar-connection.controller:dialer
-         * @returns {String} client id for connect
+         * @ngdoc methode
+         * @name peerId
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * client peer id
+         *
          */
-        $scope.connectId = '';
+        $scope.peerIdFromStorage = Broker.getPeerIdFromStorage();
+
+        /**
+         * @ngdoc methode
+         * @name newPeerId
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * new client peer id
+         *
+         */
+        $scope.newPeerId = '';
+        /**
+         * @ngdoc methode
+         * @name getPeerId
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * connect to client
+         *
+         */
+        $scope.getPeerId = function() {
+            $scope.peerId = Broker.getPeerId();
+        };
 
         /**
          * @ngdoc methode
@@ -43,9 +76,18 @@ angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
             $scope.connectId = '';
         };
 
-        $scope.$on('BrokerPeerOpen', function () {
-            $scope.peerId = Broker.getPeerId();
-
-        });
+        /**
+         * @ngdoc methode
+         * @name login
+         * @methodOf unchatbar-connection.controller:dialer
+         * @description
+         *
+         * authenticate to broker server
+         *
+         */
+        $scope.login = function () {
+            Broker.setPeerId($scope.newPeerId);
+            Broker.connectServer();
+        };
     }
 ]);

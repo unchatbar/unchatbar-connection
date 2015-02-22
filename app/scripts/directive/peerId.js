@@ -3,7 +3,7 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar-connection.directive:dialer
+ * @name unchatbar-connection.directive:unConnectionPeerID
  * @restrict E
  * @description
  *
@@ -11,11 +11,11 @@
  *
  */
 
-angular.module('unchatbar-connection').directive('unConnectionDialer', [
+angular.module('unchatbar-connection').directive('unConnectionPeerId', [
     function ( ) {
         return {
             restrict: 'E',
-            templateUrl: 'views/unchatbar-connection/dialer.html',
+            templateUrl: 'views/unchatbar-connection/peerId.html',
             controller: 'dialer',
             transclude: true,
             link : function(scope){
