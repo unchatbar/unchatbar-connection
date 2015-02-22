@@ -150,7 +150,12 @@ DataConnection.send([CLIENT-PEER-ID],[TEXT-MESSAGE],[ACTION-NAME],[METADATA]);
 <un-connection-peer-id></un-connection-peer-id>
 ```
 
+* Broker login from
 
+>
+```html
+<un-connection-authentication></un-connection-authentication>
+```
 
 ## Events
 

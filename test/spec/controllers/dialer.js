@@ -48,6 +48,25 @@ describe('Controller: dialer', function () {
                 expect(scope.connectId).toBe('');
             });
         });
+
+        describe('login', function () {
+            it('should call `broker.setPeerId` width `$scope.newPeerId `', function () {
+                spyOn(brokerService, 'setPeerId').and.returnValue('');
+                scope.newPeerId = 'test';
+
+                scope.login();
+
+                expect(brokerService.setPeerId).toHaveBeenCalledWith('test');
+            });
+            it('should call `broker.connectServer`', function () {
+                spyOn(brokerService, 'connectServer').and.returnValue('');
+                scope.connectId = 'test';
+
+                scope.login();
+
+                expect(brokerService.connectServer).toHaveBeenCalled();
+            });
+        });
     });
 
 

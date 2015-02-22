@@ -1,0 +1,15 @@
+<div >
+    <div ng-show="!peerIdFromStorage">
+        <form class="form-signin">
+            <h2 class="form-signin-heading">Please sign in</h2>
+            <label for="peerId" class="sr-only">your Phonenumber</label>
+            <input type="text" id="peerId" class="form-control"
+                   data-ng-model="newPeerId"
+                   placeholder="Username" required autofocus>
+            <button class="btn btn-lg btn-primary btn-block"
+                    data-ng-click="login();">Sign in
+            </button>
+        </form>
+    </div>
+
+</div>

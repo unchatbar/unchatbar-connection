@@ -16,6 +16,25 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
   );
 
 
+  $templateCache.put('views/unchatbar-connection/login.html',
+    "<div >\n" +
+    "    <div ng-show=\"!peerIdFromStorage\">\n" +
+    "        <form class=\"form-signin\">\n" +
+    "            <h2 class=\"form-signin-heading\">Please sign in</h2>\n" +
+    "            <label for=\"peerId\" class=\"sr-only\">your Phonenumber</label>\n" +
+    "            <input type=\"text\" id=\"peerId\" class=\"form-control\"\n" +
+    "                   data-ng-model=\"newPeerId\"\n" +
+    "                   placeholder=\"Username\" required autofocus>\n" +
+    "            <button class=\"btn btn-lg btn-primary btn-block\"\n" +
+    "                    data-ng-click=\"login();\">Sign in\n" +
+    "            </button>\n" +
+    "        </form>\n" +
+    "    </div>\n" +
+    "\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('views/unchatbar-connection/peerId.html',
     "<div data-ng-init=\"init()\">\n" +
     "    your PeerId: {{peerId}}\n" +

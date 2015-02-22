@@ -27,6 +27,29 @@ angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
 
         /**
          * @ngdoc methode
+         * @name peerId
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * client peer id
+         *
+         */
+        $scope.peerIdFromStorage = Broker.getPeerIdFromStorage();
+
+        /**
+         * @ngdoc methode
+         * @name newPeerId
+         * @methodOf unchatbar-connection.controller:dialer
+         * @return {String} peerId from Broker
+         * @description
+         *
+         * new client peer id
+         *
+         */
+        $scope.newPeerId = '';
+        /**
+         * @ngdoc methode
          * @name getPeerId
          * @methodOf unchatbar-connection.controller:dialer
          * @return {String} peerId from Broker
@@ -51,6 +74,20 @@ angular.module('unchatbar-connection').controller('dialer', ['$scope', 'Broker',
         $scope.connect = function () {
             Broker.connect($scope.connectId);
             $scope.connectId = '';
+        };
+
+        /**
+         * @ngdoc methode
+         * @name login
+         * @methodOf unchatbar-connection.controller:dialer
+         * @description
+         *
+         * authenticate to broker server
+         *
+         */
+        $scope.login = function () {
+            Broker.setPeerId($scope.newPeerId);
+            Broker.connectServer();
         };
     }
 ]);
