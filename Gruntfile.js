@@ -487,8 +487,7 @@ module.exports = function (grunt) {
     grunt.registerTask('doku', ['ngdocs']);
 
     grunt.registerTask('tag', 'create new tag', function (version) {
-        console.log(version);
-        //grunt.task.run([ 'ngtemplates:dev','bump:' + version]);
+        grunt.task.run([ 'ngtemplates:dev','bump:' + version]);
     });
 
     grunt.registerTask('build', [
