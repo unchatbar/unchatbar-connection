@@ -36,9 +36,7 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
 
 
   $templateCache.put('views/unchatbar-connection/peerId.html',
-    "<div data-ng-init=\"init()\">\n" +
-    "    your PeerId: {{peerId}}\n" +
-    "</div>\n"
+    "<div data-ng-init=\"init()\">{{peerId}}</div>\n"
   );
 
 }]);

@@ -485,6 +485,12 @@ module.exports = function (grunt) {
         'karma'
     ]);
     grunt.registerTask('doku', ['ngdocs']);
+
+    grunt.registerTask('tag', 'create new tag', function (version) {
+        console.log(version);
+        //grunt.task.run([ 'ngtemplates:dev','bump:' + version]);
+    });
+
     grunt.registerTask('build', [
         'clean:dist',
         'ngtemplates:dist',
