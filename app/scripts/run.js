@@ -10,9 +10,6 @@
 angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'DataConnection',
     function ($rootScope, Broker,DataConnection) {
         Broker.initStorage();
-        if (Broker.getPeerIdFromStorage()) {
-            Broker.connectServer();
-        }
 
         $rootScope.$on('BrokerPeerConnection', function (event, data) {
             DataConnection.add(data.connection);
