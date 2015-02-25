@@ -116,6 +116,7 @@ BrokerProvider.connectStream([CLIENTID],[STREAM],[METADATA]);
 BrokerProvider.getPeerId();
 ```
 
+
 * get PeerId from client storage
 
 >
@@ -130,6 +131,14 @@ BrokerProvider.getPeerIdFromStorage();
 >
 ```javascript
 DataConnection.send([CLIENT-PEER-ID],[TEXT-MESSAGE],[ACTION-NAME],[METADATA]);
+```
+
+
+* get all open data connection
+
+>
+```javascript
+DataConnection.getOpenConnectionMap();
 ```
 
 
@@ -162,6 +171,7 @@ DataConnection.send([CLIENT-PEER-ID],[TEXT-MESSAGE],[ACTION-NAME],[METADATA]);
 * **ConnectionGetMessage_[ACTIONNAME]**: receive new data message from client
 
 * **dataConnectionOpen** : connection to client is open
+* **dataConnectionClose** : connection to client is closed
 
 * **BrokerPeerOpen** : connection to broker server is open
 

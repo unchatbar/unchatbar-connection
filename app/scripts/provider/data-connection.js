@@ -87,6 +87,18 @@ angular.module('unchatbar-connection')
 
                     /**
                      * @ngdoc methode
+                     * @name getOpenConnectionMap
+                     * @methodOf unchatbar-connection.DataConnection
+                     * @description
+                     *
+                     * get map of open connection
+                     *
+                     */
+                    getOpenConnectionMap : function(){
+                        return this._connectionMap;
+                    },
+                    /**
+                     * @ngdoc methode
                      * @name add
                      * @methodOf unchatbar-connection.DataConnection
                      * @param {Object} connection client connection
@@ -114,6 +126,18 @@ angular.module('unchatbar-connection')
                         });
                         connection.on('close', function () {
                             delete api._connectionMap[this.peer];
+                            /**
+                             * @ngdoc event
+                             * @name ConnectionOpen
+                             * @eventOf unchatbar-connection.DataConnection
+                             * @eventType broadcast on root scope
+                             * @param {String} peerId id of client
+                             * @description
+                             *
+                             * new connection to client is open
+                             *
+                             */
+                            $rootScope.$broadcast('dataConnectionClose',{});
                         });
                         connection.on('data', function (data) {
                             var  peerId = this.peer;

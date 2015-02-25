@@ -45,7 +45,12 @@ describe('Serivce: dataConnection', function () {
                 expect(DataConnectionService._storage).toEqual({test: 'data'});
             });
         });
-
+        describe('getOpenConnectionMap', function () {
+            it('should return `DataConnection._connectionMap' , function(){
+                DataConnectionService._connectionMap = {test:'data'};
+                expect(DataConnectionService.getOpenConnectionMap()).toEqual({test:'data'});
+            });
+        });
         describe('add', function () {
             var connection = {}, peerCallBack = {};
             beforeEach(function () {
@@ -81,12 +86,19 @@ describe('Serivce: dataConnection', function () {
             });
 
             describe('listener `close`', function () {
+
                 it('should call DataConnectionService.close with param `open`', function () {
                     expect(connection.on).toHaveBeenCalledWith('close', jasmine.any(Function));
                 });
+
                 it('should remove connection from storage', function () {
                     peerCallBack.close();
                     expect(DataConnectionService._connectionMap).toEqual({});
+                });
+
+                it('should broadcast `dataConnectionClose`', function () {
+                    peerCallBack.close();
+                    expect(rootScope.$broadcast).toHaveBeenCalledWith('dataConnectionClose',{});
                 });
             });
 
