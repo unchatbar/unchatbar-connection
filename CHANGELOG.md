@@ -1,3 +1,8 @@
+## 0.0.3
+Bugfix:
+
+* broadcast only valid connections
+
 ## 0.0.2
 Feature:
 
