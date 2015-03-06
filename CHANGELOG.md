@@ -1,4 +1,7 @@
-## 0.0.3
+## 0.0.5
+Feature:
+* add modal dialog for failed login
+## 0.0.4
 Feature:
 * use fork peerjs-server from unchatbar
 ** contains authentication and ping/pong
