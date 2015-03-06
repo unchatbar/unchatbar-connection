@@ -179,7 +179,11 @@ angular.module('unchatbar-connection')
                             host: host,  
                             port: port, 
                             path: path,
-                            config: {'iceServers':iceServer},
+                            meta : {
+                                pass:'test'
+                            },
+                            test : 'value',
+                            config: {'iceServers':iceServer,'test':'value'},
                             secure:useSecureConnection,
                             debug: brokerDebugLevel
                         });
@@ -304,6 +308,7 @@ angular.module('unchatbar-connection')
                         });
 
                         peer.on('error', function (error) {
+                            console.log('err' , error);
                             api._onError(error);
                         });
 

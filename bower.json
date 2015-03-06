@@ -6,10 +6,12 @@
     "json3": "^3.3.0",
     "es5-shim": "^4.0.0",
     "bootstrap-css-only": "~3.3.0",
-    "peerjs": "~0.3.14",
+    "peerjs": "https://github.com/unchatbar/peerjs.git#b00bdee1d3c1615e73f94f4f2f00b0d118b7cff3",
+
     "ngstorage": "~0.3.0",
     "lodash": "~2.4.1"
   },
+  "ignore": [ "bower_components/peerjs.bower.json" ],
   "main": [
     "app/scripts/app.js",
     "app/scripts/*.js",
