@@ -160,11 +160,25 @@ angular.module('unchatbar-connection')
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
                         this._storage = storage.$default({
                             broker: {
-                                peerId: ''
+                                peerId: '',
+                                pass : ''
                             }
                         }).broker;
                     },
 
+                    /**
+                     * @ngdoc methode
+                     * @name _generateNewPass
+                     * @methodOf unchatbar-connection.Broker
+                     * @return {String} new password
+                     * @description
+                     *
+                     * create new password
+                     *
+                     */
+                    _generateNewPass : function(){
+                      return   Math.random().toString(36).substr(2);
+                    },
                     /**
                      * @ngdoc methode
                      * @name connectServer
@@ -175,15 +189,17 @@ angular.module('unchatbar-connection')
                      *
                      */
                     connectServer: function () {
+                        if (!this._storage.pass) {
+                            this._storage.pass = this._generateNewPass();
+                        }
                         peerService.init(this._storage.peerId,{
                             host: host,  
                             port: port, 
                             path: path,
                             meta : {
-                                pass:'test'
+                                pass:this._storage.pass
                             },
-                            test : 'value',
-                            config: {'iceServers':iceServer,'test':'value'},
+                            config: {'iceServers':iceServer},
                             secure:useSecureConnection,
                             debug: brokerDebugLevel
                         });
@@ -252,6 +268,34 @@ angular.module('unchatbar-connection')
                      */
                     getPeerId: function () {
                         return peerService.get().id || '';
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name getPass
+                     * @methodOf unchatbar-connection.Broker
+                     * @return {String} own peer id
+                     * @description
+                     *
+                     * get password for client
+                     *
+                     */
+                    getPass: function () {
+                        return this._storage.pass;
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name setPass
+                     * @methodOf unchatbar-connection.Broker
+                     * @return {String} own peer id
+                     * @description
+                     *
+                     * set password for client
+                     *
+                     */
+                    setPass: function (pass) {
+                        this._storage.pass = pass;
                     },
 
                     /**
