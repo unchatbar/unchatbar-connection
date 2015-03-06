@@ -1,4 +1,11 @@
 ## 0.0.3
+Feature:
+* use fork peerjs-server from unchatbar
+** contains authentication and ping/pong
+* use fork peerjs for send password in xhr post
+* create/send password for server authentication
+
+## 0.0.3
 Bugfix:
 
 * broadcast only valid connections
