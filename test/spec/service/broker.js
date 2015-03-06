@@ -44,7 +44,8 @@ describe('Serivce: Broker', function () {
             it('should call `$sessionStorage.$default` with object', function () {
                 expect(sessionStorage.$default).toHaveBeenCalledWith({
                     broker: {
-                        peerId: ''
+                        peerId: '',
+                        pass: ''
                     }
                 });
             });
@@ -59,19 +60,29 @@ describe('Serivce: Broker', function () {
 
                 spyOn(peerService, 'init').and.returnValue('peer');
                 spyOn(brokerService, '_peerListener').and.returnValue(true);
+                spyOn(brokerService, '_generateNewPass').and.returnValue('newPass');
             });
+            it('should not call `Broker._generateNewPass`, when password is defined in stroage', function () {
+                brokerService._storage.peerId = 'peerTest';
+                brokerService.connectServer();
+                expect(brokerService._storage.pass).toBe('newPass');
 
+            });
             it('should call Peer.init with peerId and provider options', function () {
                 brokerService._storage.peerId = 'peerTest';
+                brokerService._storage.pass = 'oldPass';
                 brokerService.connectServer();
 
                 expect(peerService.init).toHaveBeenCalledWith('peerTest', {
                     host: 'host.de',
                     port: 12345,
                     path: 'test/',
-                    config: { iceServers: [  ] },
-                    secure:false,
-                    debug : 0,
+                    meta: {
+                        pass: 'oldPass'
+                    },
+                    config: {iceServers: []},
+                    secure: false,
+                    debug: 0
                 });
             });
             it('should call _peerListener', function () {
@@ -79,7 +90,6 @@ describe('Serivce: Broker', function () {
 
                 expect(brokerService._peerListener).toHaveBeenCalled();
             });
-
 
 
         });
@@ -208,9 +218,8 @@ describe('Serivce: Broker', function () {
             it('should call `peer.connect` with connect id', function () {
                 brokerService.connect('clientId');
 
-                expect(peer.connect).toHaveBeenCalledWith('clientId',{ reliable: true });
+                expect(peer.connect).toHaveBeenCalledWith('clientId', {reliable: true});
             });
-
 
 
             it('should broadcast `BrokerPeerConnection` with return from peer.connect', inject(function ($rootScope) {
