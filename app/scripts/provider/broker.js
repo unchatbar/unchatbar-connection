@@ -124,14 +124,15 @@ angular.module('unchatbar-connection')
          * @name unchatbar-connection.Broker
          * @require $rootScope
          * @require $sessionStorage
+         * @require $modal
          * @require $localStorage
          * @require Peer
          * @description
          *
          * peer service
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer',
-            function ($rootScope, $localStorage, $sessionStorage, peerService) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage','$modal', 'Peer',
+            function ($rootScope, $localStorage, $sessionStorage,$modal, peerService) {
                 //TODO ON VIEW CHANGE START connectServer
                 var api =  {
 
@@ -352,10 +353,29 @@ angular.module('unchatbar-connection')
                         });
 
                         peer.on('error', function (error) {
-                            console.log('err' , error);
+                            if(error.message === 'Unauthorized'){
+                                api._handleFailedLogin();
+                            }
                             api._onError(error);
                         });
 
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _onOpen
+                     * @methodOf unchatbar-connection.Broker
+                     * @params {String} peerId peerId
+                     * @description
+                     *
+                     * handle peer open
+                     *
+                     */
+                    _handleFailedLogin : function(){
+                        var modalInstance = $modal.open({
+                            templateUrl: 'views/unchatbar-connection/failed-login.html',
+                            controller: 'modelPassword'
+                        });
                     },
                     /**
                      * @ngdoc methode

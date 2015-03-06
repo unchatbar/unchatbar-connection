@@ -16,6 +16,27 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
   );
 
 
+  $templateCache.put('views/unchatbar-connection/failed-login.html',
+    "<div class=\"modal-header\" data-ng-init=\"init()\">\n" +
+    "    <h3 class=\"modal-title\">I'm a modal!</h3>\n" +
+    "</div>\n" +
+    "<div class=\"modal-body\">\n" +
+    "    <div class=\"form-group\">\n" +
+    "        <div class=\"form-group\">\n" +
+    "            <label for=\"pass\">Password</label>\n" +
+    "            <input type=\"text\" required=\"true\" readonly=\"true\" class=\"form-control\"\n" +
+    "                   id=\"pass\" data-ng-model=\"pass\" placeholder=\"Enter your password\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "    <button class=\"btn btn-primary\" ng-click=\"update()\">OK</button>\n" +
+    "    <button class=\"btn btn-warning\" ng-click=\"cancel()\">Cancel</button>\n" +
+    "</div>"
+  );
+
+
   $templateCache.put('views/unchatbar-connection/login.html',
     "<div >\n" +
     "    <div ng-show=\"!peerIdFromStorage\">\n" +

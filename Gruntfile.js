@@ -400,8 +400,9 @@ module.exports = function (grunt) {
                 'svgmin'
             ],
             dev :[
-                'watch',
-                'nodemon'
+                'nodemon',
+                'watch'
+
             ]
 
         },

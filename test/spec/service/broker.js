@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Serivce: Broker', function () {
-    var brokerService, brokerProvider, peerService, rootScope;
+    var brokerService, brokerProvider, peerService, rootScope,modal;
     beforeEach(module('unchatbar-connection', ['BrokerProvider', function (_brokerProvider) {
         brokerProvider = _brokerProvider;
         brokerProvider.setHost('host.de');
@@ -11,8 +11,9 @@ describe('Serivce: Broker', function () {
     }]));
 
 
-    beforeEach(inject(function (Broker, Peer, $rootScope) {
+    beforeEach(inject(function ( $rootScope,$modal,Broker, Peer) {
         rootScope = $rootScope;
+        modal = $modal;
         brokerService = Broker;
         peerService = Peer;
 
@@ -151,6 +152,7 @@ describe('Serivce: Broker', function () {
             describe('peer.error', function () {
                 beforeEach(function () {
                     spyOn(brokerService, '_onError').and.returnValue(true);
+                    spyOn(brokerService, '_handleFailedLogin').and.returnValue(true);
                 });
 
                 it('should call peer.on with param `error`', function () {
@@ -160,9 +162,11 @@ describe('Serivce: Broker', function () {
                     peerCallBack.error('error');
                     expect(brokerService._onError).toHaveBeenCalledWith('error');
                 });
+                it('should call `Broker._handleFailedLogin` when error.message is `Unauthorized`',function(){
+                    peerCallBack.error({message:'Unauthorized'});
+                    expect(brokerService._handleFailedLogin).toHaveBeenCalledWith();
+                });
             });
-
-
         });
 
         describe('_onOpen', function () {
@@ -204,6 +208,17 @@ describe('Serivce: Broker', function () {
             });
             it('should broadcast call on $rootscope', function () {
                 expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerError', {error: 'error'});
+            });
+        });
+
+        describe('_handleFailedLogin' , function(){
+            it('should call $modal.open with controller and template' , function(){
+                spyOn(modal,'open');
+                brokerService._handleFailedLogin();
+                expect(modal.open).toHaveBeenCalledWith({
+                    templateUrl: 'views/unchatbar-connection/failed-login.html',
+                    controller: 'modelPassword'
+                });
             });
         });
 
