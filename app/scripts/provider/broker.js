@@ -71,7 +71,7 @@ angular.module('unchatbar-connection')
          * set broker debug level
          *
          */
-        this.setSecureConnection = function (_brokerDebugLevel) {
+        this.setBrokerDebugLevel = function (_brokerDebugLevel) {
             brokerDebugLevel = _brokerDebugLevel;
         };
 

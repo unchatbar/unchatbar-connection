@@ -1,6 +1,11 @@
 ## 0.0.5
+Bugfix:
+* secure connection configuration
+
+## 0.0.5
 Feature:
 * add modal dialog for failed login
+
 ## 0.0.4
 Feature:
 * use fork peerjs-server from unchatbar
