@@ -10,7 +10,7 @@
 angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'DataConnection',
     function ($rootScope, Broker,DataConnection) {
         Broker.initStorage();
-
+        DataConnection.initStorage();
         $rootScope.$on('BrokerPeerConnection', function (event, data) {
             DataConnection.add(data.connection);
         });
