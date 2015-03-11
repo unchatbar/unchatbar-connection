@@ -1,8 +1,10 @@
-## 0.0.6
+## 0.0.7
 Bugfix:
 * init data connection storage
 * handle offline/close/disconnect Broker Server
 
+Feature:
+* add client in dailer by enter event
 
 ## 0.0.6
 Bugfix:
