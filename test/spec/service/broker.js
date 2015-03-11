@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Serivce: Broker', function () {
-    var brokerService, brokerProvider, peerService, rootScope, modal;
+    var brokerService, brokerProvider, peerService, rootScope, modal, timeout;
     beforeEach(module('unchatbar-connection', ['BrokerProvider', function (_brokerProvider) {
         brokerProvider = _brokerProvider;
         brokerProvider.setHost('host.de');
@@ -11,8 +11,9 @@ describe('Serivce: Broker', function () {
     }]));
 
 
-    beforeEach(inject(function ($rootScope, $modal, Broker, Peer) {
+    beforeEach(inject(function ($rootScope,$timeout, $modal, Broker, Peer) {
         rootScope = $rootScope;
+        timeout = $timeout;
         modal = $modal;
         brokerService = Broker;
         peerService = Peer;
@@ -183,7 +184,6 @@ describe('Serivce: Broker', function () {
             describe('peer.close', function () {
                 beforeEach(function () {
                     spyOn(brokerService, '_onClose').and.returnValue(true);
-                    spyOn(brokerService, '_handleFailedLogin').and.returnValue(true);
                 });
 
                 it('should call peer.on with param `Close`', function () {
@@ -198,7 +198,6 @@ describe('Serivce: Broker', function () {
             describe('peer.disconnected', function () {
                 beforeEach(function () {
                     spyOn(brokerService, '_onDisconnect').and.returnValue(true);
-                    spyOn(brokerService, '_handleFailedLogin').and.returnValue(true);
                 });
 
                 it('should call peer.on with param `disconnected`', function () {
@@ -226,6 +225,11 @@ describe('Serivce: Broker', function () {
                 it('should call `Broker._handleFailedLogin` when error.message is `Unauthorized`', function () {
                     peerCallBack.error({message: 'Unauthorized'});
                     expect(brokerService._handleFailedLogin).toHaveBeenCalledWith();
+                });
+
+                it('should call `Broker._handleFailedLogin` when error.message is `Unauthorized`', function () {
+                    peerCallBack.error({message: 'Unauthorized'});
+                    expect(brokerService.authenticationError).toBe(true);
                 });
             });
         });
@@ -276,18 +280,41 @@ describe('Serivce: Broker', function () {
             beforeEach(function () {
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
                 spyOn(brokerService, 'connectServer').and.returnValue(true);
+
+
             });
             it('should broadcast call on $rootscope', function () {
                 brokerService._onClose();
 
                 expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerClose', {});
             });
+            describe('can connectServer' , function(){
+                it('should call on brokerService.connectServer', function () {
+                    spyOn(brokerService, 'getPeerIdFromStorage').and.returnValue(true);
+                    brokerService.authenticationError = false;
+                    brokerService._onClose();
 
-            it('should call on brokerService.connectServer', function () {
-                brokerService._onClose();
-
-                expect(brokerService.connectServer).toHaveBeenCalled();
+                    expect(brokerService.connectServer).toHaveBeenCalled();
+                });
             });
+            describe('can not connectServer' , function() {
+                it('should call on brokerService.connectServer', function () {
+                    spyOn(brokerService, 'getPeerIdFromStorage').and.returnValue(true);
+                    brokerService.authenticationError = true;
+                    brokerService._onClose();
+
+                    expect(brokerService.connectServer).not.toHaveBeenCalled();
+                });
+
+                it('should call on brokerService.connectServer', function () {
+                    spyOn(brokerService, 'getPeerIdFromStorage').and.returnValue(false);
+                    brokerService.authenticationError = false;
+                    brokerService._onClose();
+
+                    expect(brokerService.connectServer).not.toHaveBeenCalled();
+                });
+            });
+
         });
 
         describe('_onDisconnect', function () {
@@ -313,7 +340,7 @@ describe('Serivce: Broker', function () {
                 });
                 it('should broadcast call on $rootscope', function () {
                     brokerService._onDisconnect();
-
+                    timeout.flush();
                     expect(peer.reconnect).toHaveBeenCalled();
                 });
             });

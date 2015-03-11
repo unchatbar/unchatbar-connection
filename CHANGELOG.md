@@ -1,5 +1,11 @@
 ## 0.0.6
 Bugfix:
+* init data connection storage
+* handle offline/close/disconnect Broker Server
+
+
+## 0.0.6
+Bugfix:
 * secure connection configuration
 
 ## 0.0.5

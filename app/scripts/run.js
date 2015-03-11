@@ -25,7 +25,7 @@ angular.module('unchatbar-connection').run(['$rootScope','$window', 'Broker', 'D
 
         $window.addEventListener('online',  function(){
             if(Broker.getPeerIdFromStorage()){
-                Broker.connectServer();
+                    Broker.connectServer();
             }
         });
         $window.addEventListener('offline', Broker.destroyServerConnection());

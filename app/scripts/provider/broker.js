@@ -131,8 +131,8 @@ angular.module('unchatbar-connection')
          *
          * peer service
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', '$modal', 'Peer',
-            function ($rootScope, $localStorage, $sessionStorage, $modal, peerService) {
+        this.$get = ['$rootScope','$timeout', '$localStorage', '$sessionStorage', '$modal', 'Peer',
+            function ($rootScope, $timeout,$localStorage, $sessionStorage, $modal, peerService) {
                 //TODO ON VIEW CHANGE START connectServer
                 var api = {
 
@@ -148,6 +148,15 @@ angular.module('unchatbar-connection')
                         peerId: ''
                     },
 
+                    /**
+                     * @ngdoc methode
+                     * @name authenticationError
+                     * @propertyOf unchatbar-connection.Broker
+                     * @private
+                     * @returns {Boolean} is authentication error
+                     *
+                     */
+                    authenticationError :false,
                     /**
                      * @ngdoc methode
                      * @name initStorage
@@ -208,6 +217,8 @@ angular.module('unchatbar-connection')
                         if (!this._storage.pass) {
                             this._storage.pass = this._generateNewPass();
                         }
+                        api.authenticationError = false;
+
                         peerService.init(this._storage.peerId, {
                             host: host,
                             port: port,
@@ -377,6 +388,7 @@ angular.module('unchatbar-connection')
 
                         peer.on('error', function (error) {
                             if (error.message === 'Unauthorized') {
+                                api.authenticationError= true;
                                 api._handleFailedLogin();
                             }
                             api._onError(error);
@@ -531,7 +543,10 @@ angular.module('unchatbar-connection')
                          * @param {Object} error error object
                          */
                         $rootScope.$broadcast('BrokerPeerClose', {});
-                        api.connectServer();
+
+                        if(api.getPeerIdFromStorage() && api.authenticationError === false) {
+                            api.connectServer();
+                        };
                     },
 
                     /**
@@ -557,8 +572,11 @@ angular.module('unchatbar-connection')
                          * @param {Object} error error object
                          */
                         $rootScope.$broadcast('BrokerPeerDisconnect', {});
-                        if (api._isBrowserOnline()) {
-                            peerService.get().reconnect();
+                        if (api._isBrowserOnline() && api.authenticationError === false) {
+                           $timeout(function(){
+                               peerService.get().reconnect();
+                           },300)
+
                         }
                     }
 
