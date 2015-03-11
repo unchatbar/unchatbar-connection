@@ -15,7 +15,7 @@ angular.module('unchatbar-connection')
             port = '',
             path = '',
             useLocalStorage = false,
-            useSecureConnection=false,
+            useSecureConnection = false,
             brokerDebugLevel = 0,
             iceServer = [];
 
@@ -131,10 +131,10 @@ angular.module('unchatbar-connection')
          *
          * peer service
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage','$modal', 'Peer',
-            function ($rootScope, $localStorage, $sessionStorage,$modal, peerService) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', '$modal', 'Peer',
+            function ($rootScope, $localStorage, $sessionStorage, $modal, peerService) {
                 //TODO ON VIEW CHANGE START connectServer
-                var api =  {
+                var api = {
 
                     /**
                      * @ngdoc methode
@@ -144,8 +144,8 @@ angular.module('unchatbar-connection')
                      * @returns {Object} broker storage
                      *
                      */
-                    _storage : {
-                      peerId : ''
+                    _storage: {
+                        peerId: ''
                     },
 
                     /**
@@ -157,12 +157,12 @@ angular.module('unchatbar-connection')
                      * init storage
                      *
                      */
-                    initStorage : function() {
+                    initStorage: function () {
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
                         this._storage = storage.$default({
                             broker: {
                                 peerId: '',
-                                pass : ''
+                                pass: ''
                             }
                         }).broker;
                     },
@@ -177,8 +177,23 @@ angular.module('unchatbar-connection')
                      * create new password
                      *
                      */
-                    _generateNewPass : function(){
-                      return   Math.random().toString(36).substr(2);
+                    _generateNewPass: function () {
+                        return Math.random().toString(36).substr(2);
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name destroyServerConnection
+                     * @methodOf unchatbar-connection.Broker
+                     * @description
+                     *
+                     * destroy connection
+                     *
+                     */
+                    destroyServerConnection : function(){
+                        if(this.getPeerId()) {
+                            peerService.get().destroy();
+                        }
                     },
                     /**
                      * @ngdoc methode
@@ -193,15 +208,15 @@ angular.module('unchatbar-connection')
                         if (!this._storage.pass) {
                             this._storage.pass = this._generateNewPass();
                         }
-                        peerService.init(this._storage.peerId,{
-                            host: host,  
-                            port: port, 
+                        peerService.init(this._storage.peerId, {
+                            host: host,
+                            port: port,
                             path: path,
-                            meta : {
-                                pass:this._storage.pass
+                            meta: {
+                                pass: this._storage.pass
                             },
-                            config: {'iceServers':iceServer},
-                            secure:useSecureConnection,
+                            config: {'iceServers': iceServer},
+                            secure: useSecureConnection,
                             debug: brokerDebugLevel
                         });
                         this._peerListener();
@@ -218,7 +233,7 @@ angular.module('unchatbar-connection')
                      *
                      */
                     connect: function (id) {
-                        var connection = peerService.get().connect(id,{reliable:true});
+                        var connection = peerService.get().connect(id, {reliable: true});
                         if (connection) {
                             $rootScope.$broadcast('BrokerPeerConnection', {
                                 connection: connection
@@ -238,8 +253,8 @@ angular.module('unchatbar-connection')
                      * connect a stream to client
                      *
                      */
-                    connectStream: function (id,stream,metaData) {
-                        var streamCall = peerService.get().call(id,stream,{metadata:metaData});
+                    connectStream: function (id, stream, metaData) {
+                        var streamCall = peerService.get().call(id, stream, {metadata: metaData});
                         return streamCall;
                     },
 
@@ -254,7 +269,7 @@ angular.module('unchatbar-connection')
                      * set peer id
                      *
                      */
-                    setPeerId : function (peerId) {
+                    setPeerId: function (peerId) {
                         api._storage.peerId = peerId;
                     },
                     /**
@@ -323,7 +338,7 @@ angular.module('unchatbar-connection')
                      * helper for is browser online
                      *
                      */
-                    _isBrowserOnline : function() {
+                    _isBrowserOnline: function () {
                         return navigator.onLine;
                     },
 
@@ -352,8 +367,16 @@ angular.module('unchatbar-connection')
                             api._onConnection(connection);
                         });
 
+                        peer.on('disconnected', function (connection) {
+                            api._onDisconnect(connection);
+                        });
+
+                        peer.on('close', function (connection) {
+                            api._onClose(connection);
+                        });
+
                         peer.on('error', function (error) {
-                            if(error.message === 'Unauthorized'){
+                            if (error.message === 'Unauthorized') {
                                 api._handleFailedLogin();
                             }
                             api._onError(error);
@@ -371,7 +394,7 @@ angular.module('unchatbar-connection')
                      * handle peer open
                      *
                      */
-                    _handleFailedLogin : function(){
+                    _handleFailedLogin: function () {
                         var modalInstance = $modal.open({
                             templateUrl: 'views/unchatbar-connection/failed-login.html',
                             controller: 'modelPassword'
@@ -387,7 +410,7 @@ angular.module('unchatbar-connection')
                      * handle peer open
                      *
                      */
-                    _onOpen : function (peerId) {
+                    _onOpen: function (peerId) {
                         $rootScope.$apply(function () {
                             api.setPeerId(peerId);
                             /**
@@ -414,7 +437,7 @@ angular.module('unchatbar-connection')
                      * handle peer call
                      *
                      */
-                    _onCall : function (call) {
+                    _onCall: function (call) {
                         $rootScope.$apply(function () {
 
                             /**
@@ -442,7 +465,7 @@ angular.module('unchatbar-connection')
                      * handle peer connection
                      *
                      */
-                    _onConnection : function (connection) {
+                    _onConnection: function (connection) {
                         $rootScope.$apply(function () {
                             /**
                              * @ngdoc event
@@ -469,7 +492,7 @@ angular.module('unchatbar-connection')
                      * handle peer error
                      *
                      */
-                    _onError : function (error) {
+                    _onError: function (error) {
                         /**
                          * @ngdoc event
                          * @name BrokerPeerError
@@ -483,7 +506,63 @@ angular.module('unchatbar-connection')
                          */
                         $rootScope.$broadcast('BrokerPeerError', {error: error});
 
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _onConnection
+                     * @methodOf unchatbar-connection.Broker
+                     * @params {Object} error connection
+                     * @description
+                     *
+                     * handle close connection to broker
+                     *
+                     */
+                    _onClose: function () {
+                        /**
+                         * @ngdoc event
+                         * @name BrokerPeerClose
+                         * @eventOf unchatbar-connection.Broker
+                         * @eventType broadcast on root scope
+                         * @description
+                         *
+                         * Broadcasted after close in peer conncetion
+                         *
+                         * @param {Object} error error object
+                         */
+                        $rootScope.$broadcast('BrokerPeerClose', {});
+                        api.connectServer();
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _onDisconnect
+                     * @methodOf unchatbar-connection.Broker
+                     * @params {Object} error connection
+                     * @description
+                     *
+                     * handle diconnect connection to broker
+                     *
+                     */
+                    _onDisconnect: function () {
+                        /**
+                         * @ngdoc event
+                         * @name BrokerPeerDisconnect
+                         * @eventOf unchatbar-connection.Broker
+                         * @eventType broadcast on root scope
+                         * @description
+                         *
+                         * Broadcasted after disconnect in peer conncetion
+                         *
+                         * @param {Object} error error object
+                         */
+                        $rootScope.$broadcast('BrokerPeerDisconnect', {});
+                        if (api._isBrowserOnline()) {
+                            peerService.get().reconnect();
+                        }
                     }
+
+
                 };
 
                 return api;

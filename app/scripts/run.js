@@ -7,8 +7,8 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'DataConnection',
-    function ($rootScope, Broker,DataConnection) {
+angular.module('unchatbar-connection').run(['$rootScope','$window', 'Broker', 'DataConnection',
+    function ($rootScope, $window, Broker,DataConnection) {
         Broker.initStorage();
         DataConnection.initStorage();
         $rootScope.$on('BrokerPeerConnection', function (event, data) {
@@ -22,5 +22,12 @@ angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'DataConnect
         $rootScope.$on('ConnectionGetMessage_readMessage', function (event, data) {
             DataConnection.removeFromQueue(data.peerId, data.message.id);
         });
+
+        $window.addEventListener('online',  function(){
+            if(Broker.getPeerIdFromStorage()){
+                Broker.connectServer();
+            }
+        });
+        $window.addEventListener('offline', Broker.destroyServerConnection());
     }
 ]);

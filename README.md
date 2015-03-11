@@ -179,3 +179,5 @@ DataConnection.getOpenConnectionMap();
 
 * **BrokerPeerConnection**: try of new data connection
 * **BrokerPeerError**: error by Broker server
+* **BrokerPeerDisconnect** Server Connection disconnect
+* **BrokerPeerClose** Server Connection closed

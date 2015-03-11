@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Serivce: Broker', function () {
-    var brokerService, brokerProvider, peerService, rootScope,modal;
+    var brokerService, brokerProvider, peerService, rootScope, modal;
     beforeEach(module('unchatbar-connection', ['BrokerProvider', function (_brokerProvider) {
         brokerProvider = _brokerProvider;
         brokerProvider.setHost('host.de');
@@ -11,7 +11,7 @@ describe('Serivce: Broker', function () {
     }]));
 
 
-    beforeEach(inject(function ( $rootScope,$modal,Broker, Peer) {
+    beforeEach(inject(function ($rootScope, $modal, Broker, Peer) {
         rootScope = $rootScope;
         modal = $modal;
         brokerService = Broker;
@@ -55,6 +55,37 @@ describe('Serivce: Broker', function () {
             });
         });
 
+
+        describe('destroyServerConnection', function () {
+            var peer = {
+                destroy: function () {
+                }
+            };
+            describe('connection-id exists', function () {
+
+                beforeEach(inject(function ($sessionStorage) {
+                    spyOn(peerService, 'get').and.returnValue(peer);
+                    spyOn(brokerService, 'getPeerId').and.returnValue(true);
+                    spyOn(peer, 'destroy').and.returnValue(true);
+                }));
+                it('should call `$sessionStorage.$default` with object', function () {
+                    brokerService.destroyServerConnection();
+                    expect(peer.destroy).toHaveBeenCalled();
+                });
+            });
+
+            describe('connection-id not exists', function () {
+                beforeEach(inject(function ($sessionStorage) {
+                    spyOn(peerService, 'get').and.returnValue(peer);
+                    spyOn(brokerService, 'getPeerId').and.returnValue(false);
+                    spyOn(peer, 'destroy').and.returnValue(true);
+                }));
+                it('should call `$sessionStorage.$default` with object', function () {
+                    brokerService.destroyServerConnection();
+                    expect(peer.destroy).not.toHaveBeenCalled();
+                });
+            });
+        });
 
         describe('connectServer', function () {
             beforeEach(function () {
@@ -149,6 +180,36 @@ describe('Serivce: Broker', function () {
                 });
             });
 
+            describe('peer.close', function () {
+                beforeEach(function () {
+                    spyOn(brokerService, '_onClose').and.returnValue(true);
+                    spyOn(brokerService, '_handleFailedLogin').and.returnValue(true);
+                });
+
+                it('should call peer.on with param `Close`', function () {
+                    expect(peer.on).toHaveBeenCalledWith('close', jasmine.any(Function));
+                });
+                it('should call `brokerService._onClose`', function () {
+                    peerCallBack.close();
+                    expect(brokerService._onClose).toHaveBeenCalled();
+                });
+            });
+
+            describe('peer.disconnected', function () {
+                beforeEach(function () {
+                    spyOn(brokerService, '_onDisconnect').and.returnValue(true);
+                    spyOn(brokerService, '_handleFailedLogin').and.returnValue(true);
+                });
+
+                it('should call peer.on with param `disconnected`', function () {
+                    expect(peer.on).toHaveBeenCalledWith('disconnected', jasmine.any(Function));
+                });
+                it('should call `brokerService._onDisconnect`', function () {
+                    peerCallBack.disconnected();
+                    expect(brokerService._onDisconnect).toHaveBeenCalled();
+                });
+            });
+
             describe('peer.error', function () {
                 beforeEach(function () {
                     spyOn(brokerService, '_onError').and.returnValue(true);
@@ -162,8 +223,8 @@ describe('Serivce: Broker', function () {
                     peerCallBack.error('error');
                     expect(brokerService._onError).toHaveBeenCalledWith('error');
                 });
-                it('should call `Broker._handleFailedLogin` when error.message is `Unauthorized`',function(){
-                    peerCallBack.error({message:'Unauthorized'});
+                it('should call `Broker._handleFailedLogin` when error.message is `Unauthorized`', function () {
+                    peerCallBack.error({message: 'Unauthorized'});
                     expect(brokerService._handleFailedLogin).toHaveBeenCalledWith();
                 });
             });
@@ -211,9 +272,69 @@ describe('Serivce: Broker', function () {
             });
         });
 
-        describe('_handleFailedLogin' , function(){
-            it('should call $modal.open with controller and template' , function(){
-                spyOn(modal,'open');
+        describe('_onClose', function () {
+            beforeEach(function () {
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                spyOn(brokerService, 'connectServer').and.returnValue(true);
+            });
+            it('should broadcast call on $rootscope', function () {
+                brokerService._onClose();
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerClose', {});
+            });
+
+            it('should call on brokerService.connectServer', function () {
+                brokerService._onClose();
+
+                expect(brokerService.connectServer).toHaveBeenCalled();
+            });
+        });
+
+        describe('_onDisconnect', function () {
+            var peer = {
+                reconnect: function () {
+                }
+            };
+
+            beforeEach(function () {
+                spyOn(peerService, 'get').and.returnValue(peer);
+                spyOn(peer, 'reconnect').and.returnValue(true);
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                spyOn(brokerService, 'connectServer').and.returnValue(true);
+            });
+            it('should broadcast call on $rootscope', function () {
+                brokerService._onDisconnect();
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerDisconnect', {});
+            });
+            describe('browser is online', function () {
+                beforeEach(function () {
+                    spyOn(brokerService, '_isBrowserOnline').and.returnValue(true);
+                });
+                it('should broadcast call on $rootscope', function () {
+                    brokerService._onDisconnect();
+
+                    expect(peer.reconnect).toHaveBeenCalled();
+                });
+            });
+
+            describe('browser is offline', function () {
+                beforeEach(function () {
+                    spyOn(brokerService, '_isBrowserOnline').and.returnValue(false);
+                });
+                it('should broadcast call on $rootscope', function () {
+                    brokerService._onDisconnect();
+
+                    expect(peer.reconnect).not.toHaveBeenCalled();
+                });
+            });
+
+        });
+
+
+        describe('_handleFailedLogin', function () {
+            it('should call $modal.open with controller and template', function () {
+                spyOn(modal, 'open');
                 brokerService._handleFailedLogin();
                 expect(modal.open).toHaveBeenCalledWith({
                     templateUrl: 'views/unchatbar-connection/failed-login.html',
