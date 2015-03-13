@@ -137,7 +137,9 @@ angular.module('unchatbar-connection')
                              * new connection to client is open
                              *
                              */
-                            $rootScope.$broadcast('dataConnectionClose',{});
+                            $rootScope.$apply(function () {
+                                $rootScope.$broadcast('dataConnectionClose', {});
+                            });
                         });
                         connection.on('data', function (data) {
                             var  peerId = this.peer;
