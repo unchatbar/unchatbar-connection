@@ -1,3 +1,7 @@
+## 0.0.8
+Bugfix:
+* close connection event
+
 ## 0.0.7
 Bugfix:
 * init data connection storage
