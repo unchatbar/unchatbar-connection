@@ -294,6 +294,8 @@ describe('Serivce: Broker', function () {
                     brokerService.authenticationError = false;
                     brokerService._onClose();
 
+                    timeout.flush();
+
                     expect(brokerService.connectServer).toHaveBeenCalled();
                 });
             });

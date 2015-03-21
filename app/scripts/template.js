@@ -2,18 +2,18 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
   'use strict';
 
   $templateCache.put('views/unchatbar-connection/dialer.html',
-    "<div data-ng-init=\"init()\">\n" +
-    "    <div ng-show=\"peerId\">\n" +
-    "        <form ng-submit=\"connect()\">\n" +
-    "            <div class=\"input-group dialer\">\n" +
-    "                <input type=\"text\" class=\"form-control\" data-ng-model=\"connectId\" placeholder=\"Username\">\n" +
-    "\n" +
-    "                <div data-ng-click=\"connect()\" class=\"input-group-addon\">\n" +
-    "                    <i class=\"fa fa-check fa-1x\"></i>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </form>\n" +
-    "    </div>\n" +
+    "<div class=\"un-connect-dialer\" data-ng-init=\"init()\" data-ng-show=\"peerId\">\n" +
+    "    <form ng-submit=\"connect()\" class=\"form-group\">\n" +
+    "        <label for=\"input-add\" class=\"sr-only\">Add user</label>\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <input type=\"text\" data-ng-model=\"connectId\" autocomplete=\"off\" placeholder=\"Enter user name\" id=\"input-add\"\n" +
+    "                   class=\"form-control input-sm\">\n" +
+    "            <span class=\"input-group-btn\">\n" +
+    "              <button class=\"btn btn-success btn-sm un-connect-button-login\" type=\"button\" data-ng-click=\"connect()\"><i class=\"fa fa-plus\"></i>\n" +
+    "              </button>\n" +
+    "            </span>\n" +
+    "        </div>\n" +
+    "    </form>\n" +
     "</div>"
   );
 
@@ -45,34 +45,27 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
 
   $templateCache.put('views/unchatbar-connection/login.html',
     "<div class=\"login\">\n" +
-    "    <div data-ng-show=\"!peerIdFromStorage\">\n" +
+    "    <div data-ng-show=\"!peerId\">\n" +
     "        <div class=\"page-header\">\n" +
     "            <h2>Please sign in</h2>\n" +
     "        </div>\n" +
-    "        <form>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <label class=\"sr-only\" for=\"input-message\">Your phone number</label>\n" +
+    "        <form class=\"form-group\">\n" +
+    "            <label class=\"sr-only\" for=\"input-message\">Your phone number</label>\n" +
+    "            <div class=\"input-group\">\n" +
+    "                <input type=\"text\"\n" +
+    "                       data-ng-model=\"newPeerId\"\n" +
+    "                       class=\"form-control input-lg\" id=\"input-message\" placeholder=\"Enter your phone number\"\n" +
+    "                       autocomplete=\"off\">\n" +
+    "                <span class=\"input-group-btn\">\n" +
+    "                    <div ui-sref=\"chat\" class=\"btn btn-primary btn-lg\" data-ng-click=\"login();\">\n" +
+    "                        <i class=\"fa fa-sign-in\"></i>\n" +
+    "                    </div>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
     "\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <input type=\"text\"\n" +
-    "                           data-ng-model=\"newPeerId\"\n" +
-    "                           class=\"form-control input-lg\" id=\"input-message\" placeholder=\"Enter your phone number\"\n" +
-    "                           autocomplete=\"off\">\n" +
-    "          <span class=\"input-group-btn\">\n" +
-    "            <div ui-sref=\"chat\" class=\"btn btn-primary btn-lg\" data-ng-click=\"login();\">\n" +
-    "                <i class=\"fa fa-sign-in\"></i>\n" +
-    "            </div>\n" +
-    "          </span>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
     "        </form>\n" +
     "    </div>\n" +
     "</div>"
-  );
-
-
-  $templateCache.put('views/unchatbar-connection/peerId.html',
-    "<div data-ng-init=\"init()\">{{peerId}}</div>\n"
   );
 
 }]);

@@ -1,12 +1,11 @@
-<div class="form-group" data-ng-init="init()" data-ng-show="peerId">
-    <form ng-submit="connect()">
+<div class="un-connect-dialer" data-ng-init="init()" data-ng-show="peerId">
+    <form ng-submit="connect()" class="form-group">
         <label for="input-add" class="sr-only">Add user</label>
-
         <div class="input-group">
             <input type="text" data-ng-model="connectId" autocomplete="off" placeholder="Enter user name" id="input-add"
                    class="form-control input-sm">
             <span class="input-group-btn">
-              <button class="btn btn-success btn-sm" type="button" data-ng-click="connect()"><i class="fa fa-plus"></i>
+              <button class="btn btn-success btn-sm un-connect-button-login" type="button" data-ng-click="connect()"><i class="fa fa-plus"></i>
               </button>
             </span>
         </div>

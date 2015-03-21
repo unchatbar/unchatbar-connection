@@ -152,13 +152,6 @@ DataConnection.getOpenConnectionMap();
 <un-connection-dialer></un-connection-dialer>
 ```
 
-* output peer id from user
-
->
-```html
-<un-connection-peer-id></un-connection-peer-id>
-```
-
 * Broker login from
 
 >
