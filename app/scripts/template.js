@@ -44,21 +44,30 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
 
 
   $templateCache.put('views/unchatbar-connection/login.html',
-    "<div >\n" +
-    "    <div ng-show=\"!peerIdFromStorage\">\n" +
-    "        <form class=\"form-signin\">\n" +
-    "            <h2 class=\"form-signin-heading\">Please sign in</h2>\n" +
-    "            <label for=\"peerId\" class=\"sr-only\">your Phonenumber</label>\n" +
-    "            <input type=\"text\" id=\"peerId\" class=\"form-control\"\n" +
-    "                   data-ng-model=\"newPeerId\"\n" +
-    "                   placeholder=\"Username\" required autofocus>\n" +
-    "            <button class=\"btn btn-lg btn-primary btn-block\"\n" +
-    "                    data-ng-click=\"login();\">Sign in\n" +
-    "            </button>\n" +
+    "<div class=\"login\">\n" +
+    "    <div data-ng-show=\"!peerIdFromStorage\">\n" +
+    "        <div class=\"page-header\">\n" +
+    "            <h2>Please sign in</h2>\n" +
+    "        </div>\n" +
+    "        <form>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <label class=\"sr-only\" for=\"input-message\">Your phone number</label>\n" +
+    "\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <input type=\"text\"\n" +
+    "                           data-ng-model=\"newPeerId\"\n" +
+    "                           class=\"form-control input-lg\" id=\"input-message\" placeholder=\"Enter your phone number\"\n" +
+    "                           autocomplete=\"off\">\n" +
+    "          <span class=\"input-group-btn\">\n" +
+    "            <div ui-sref=\"chat\" class=\"btn btn-primary btn-lg\" data-ng-click=\"login();\">\n" +
+    "                <i class=\"fa fa-sign-in\"></i>\n" +
+    "            </div>\n" +
+    "          </span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
     "        </form>\n" +
     "    </div>\n" +
-    "\n" +
-    "</div>\n"
+    "</div>"
   );
 
 

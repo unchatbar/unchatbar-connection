@@ -1,13 +1,14 @@
-<div data-ng-init="init()">
-    <div ng-show="peerId">
-        <form ng-submit="connect()">
-            <div class="input-group dialer">
-                <input type="text" class="form-control" data-ng-model="connectId" placeholder="Username">
+<div class="form-group" data-ng-init="init()" data-ng-show="peerId">
+    <form ng-submit="connect()">
+        <label for="input-add" class="sr-only">Add user</label>
 
-                <div data-ng-click="connect()" class="input-group-addon">
-                    <i class="fa fa-check fa-1x"></i>
-                </div>
-            </div>
-        </form>
-    </div>
+        <div class="input-group">
+            <input type="text" data-ng-model="connectId" autocomplete="off" placeholder="Enter user name" id="input-add"
+                   class="form-control input-sm">
+            <span class="input-group-btn">
+              <button class="btn btn-success btn-sm" type="button" data-ng-click="connect()"><i class="fa fa-plus"></i>
+              </button>
+            </span>
+        </div>
+    </form>
 </div>

@@ -1,0 +1,16 @@
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "components-font-awesome/scss/font-awesome";
+$colorHeader: #ccc;
+
+.login {
+  max-width: 440px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+.login{
+  .page-header {
+    margin: 30px 0 20px;
+    border-bottom-color: $colorHeader;
+  }
+}
