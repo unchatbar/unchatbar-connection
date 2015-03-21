@@ -1,21 +1,21 @@
 <div class="modal-header" data-ng-init="init()">
-    <h3 class="modal-title">Login Failed!</h3>
+    <h3 class="modal-title" translate>Login Failed!</h3>
 </div>
 <div class="modal-body">
-    <div class="alert alert-info" role="alert">The phone-number exists. Please choose another phone-number.
+    <div class="alert alert-info" role="alert" translate>The phone-number exists. Please choose another phone-number.
         <br/>
         If this this phone-number is yours, please insert the correct password.
     </div>
     <div class="form-group">
         <div class="form-group">
-            <label for="pass">Password</label>
+            <label for="pass" translate>Password</label>
             <input type="text" required="true" class="form-control"
-                   id="pass" data-ng-model="pass" placeholder="Enter your password">
+                   id="pass" data-ng-model="pass" placeholder="{{'Enter your password'|translate}}">
         </div>
     </div>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="update()">save new password</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="update()" translate>save new password</button>
+    <button class="btn btn-warning" ng-click="cancel()" translate>Cancel</button>
 </div>

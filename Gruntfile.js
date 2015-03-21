@@ -242,6 +242,20 @@ module.exports = function (grunt) {
             }
         },
 
+        nggettext_extract: {
+            pot: {
+                files: {
+                    'po/template.pot': ['app/views/**/*.html']
+                }
+            }
+        },
+        nggettext_compile: {
+            all: {
+                files: {
+                    'app/scripts/translations.js': ['po/*.po']
+                }
+            }
+        },
         // Renames files for browser caching purposes
         filerev: {
             dist: {

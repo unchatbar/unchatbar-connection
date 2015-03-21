@@ -26,6 +26,7 @@ module.exports = function (config) {
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
             'bower_components/ngstorage/ngStorage.js',
             'bower_components/lodash/dist/lodash.compat.js',
+            'bower_components/angular-gettext/dist/angular-gettext.js',
             // endbower
             'bower_components/angular-mocks/angular-mocks.js',
             'test/mock/views/**/*.html',

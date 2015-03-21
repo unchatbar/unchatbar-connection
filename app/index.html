@@ -41,10 +41,12 @@
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/ngstorage/ngStorage.js"></script>
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+<script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/translations.js"></script>
 <script src="scripts/constants.js"></script>
 <script src="scripts/app.js"></script>
 <!-- Provider -->
@@ -70,9 +72,10 @@
 <script src="scripts/run.js"></script>
 <!-- endbuild -->
 <script>
-    angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'DataConnection',
-        function ($rootScope, Broker, DataConnection) {
-
+    angular.module('unchatbar-connection').run(['$rootScope', 'Broker', 'DataConnection','gettextCatalog',
+        function ($rootScope, Broker, DataConnection,gettextCatalog) {
+            gettextCatalog.setCurrentLanguage('de');
+            gettextCatalog.debug = true;
             if (Broker.getPeerIdFromStorage()) {
                 Broker.connectServer();
             }

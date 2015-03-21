@@ -9,8 +9,8 @@
     "peerjs": "https://github.com/unchatbar/peerjs.git#b00bdee1d3c1615e73f94f4f2f00b0d118b7cff3",
     "angular-bootstrap": "~0.12.0",
     "ngstorage": "~0.3.0",
-    "lodash": "~2.4.1"
-
+    "lodash": "~2.4.1",
+    "angular-gettext": "~2.0.3"
   },
   "ignore": [
     "bower_components/peerjs.bower.json"

@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+
+#: app/views/unchatbar-connection/dialer.html:3
+msgid "Add user"
+msgstr ""
+
+#: app/views/unchatbar-connection/failed-login.html:20
+msgid "Cancel"
+msgstr ""
+
+#: app/views/unchatbar-connection/dialer.html:5
+msgid "Enter user name"
+msgstr ""
+
+#: app/views/unchatbar-connection/failed-login.html:13
+msgid "Enter your password"
+msgstr ""
+
+#: app/views/unchatbar-connection/login.html:11
+msgid "Enter your phone number"
+msgstr ""
+
+#: app/views/unchatbar-connection/failed-login.html:2
+msgid "Login Failed!"
+msgstr ""
+
+#: app/views/unchatbar-connection/failed-login.html:11
+msgid "Password"
+msgstr ""
+
+#: app/views/unchatbar-connection/login.html:4
+msgid "Please sign in"
+msgstr ""
+
+#: app/views/unchatbar-connection/failed-login.html:5
+msgid ""
+"The phone-number exists. Please choose another phone-number.\n"
+"        <br>\n"
+"        If this this phone-number is yours, please insert the correct password."
+msgstr ""
+
+#: app/views/unchatbar-connection/login.html:7
+msgid "Your phone number"
+msgstr ""
+
+#: app/views/unchatbar-connection/failed-login.html:19
+msgid "save new password"
+msgstr ""

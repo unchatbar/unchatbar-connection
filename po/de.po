@@ -1,0 +1,63 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: unchatbar-connection\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: app/views/unchatbar-connection/dialer.html:3
+msgid "Add user"
+msgstr "Kontakt hinzufügen"
+
+#: app/views/unchatbar-connection/failed-login.html:20
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: app/views/unchatbar-connection/dialer.html:5
+msgid "Enter user name"
+msgstr "Telefonnummer des neuen Kontakts"
+
+#: app/views/unchatbar-connection/failed-login.html:13
+msgid "Enter your password"
+msgstr "Gibt dein Passwort ein"
+
+#: app/views/unchatbar-connection/login.html:11
+msgid "Enter your phone number"
+msgstr "deine wunsch telefonnummer"
+
+#: app/views/unchatbar-connection/failed-login.html:2
+msgid "Login Failed!"
+msgstr "Login fehlgeschlagen"
+
+#: app/views/unchatbar-connection/failed-login.html:11
+msgid "Password"
+msgstr "Passwort"
+
+#: app/views/unchatbar-connection/login.html:4
+msgid "Please sign in"
+msgstr "Anmeldung"
+
+#: app/views/unchatbar-connection/failed-login.html:5
+msgid ""
+"The phone-number exists. Please choose another phone-number.\n"
+"        <br>\n"
+"        If this this phone-number is yours, please insert the correct "
+"password."
+msgstr ""
+"Diese Telefonnummer existiert bereits.<br>\n"
+"Gebe dein Passwort ein, wenn die Telefonnummer dir gehört."
+
+#: app/views/unchatbar-connection/login.html:7
+msgid "Your phone number"
+msgstr "deine Telefonnummer"
+
+#: app/views/unchatbar-connection/failed-login.html:19
+msgid "save new password"
+msgstr "neues Passwort speichern"
