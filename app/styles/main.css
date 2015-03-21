@@ -10,7 +10,7 @@ Error: File to import not found or unreadable: bootstrap-sass-official/assets/st
 4: @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 5: @import "components-font-awesome/scss/font-awesome";
 6: 
-7: /* BASE - Base Variable file along with starting point Mixins and Placeholders.
+7: /* Variable
 8: ========================================================================== *\/
 9: @import "_variables";
 
@@ -58,4 +58,4 @@ main.scss:4
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: bootstrap-sass-official/assets/stylesheets/_bootstrap.scss.\A        Load paths:\A          \A         on line 4 of main.scss\A \A 1: /* VENDOR - Default fall-backs and external files.\A 2: ========================================================================== */\A 3: \A 4: @import \"bootstrap-sass-official/assets/stylesheets/_bootstrap.scss\";\A 5: @import \"components-font-awesome/scss/font-awesome\";\A 6: \A 7: /* BASE - Base Variable file along with starting point Mixins and Placeholders.\A 8: ========================================================================== */\A 9: @import \"_variables\";"; }
+  content: "Error: File to import not found or unreadable: bootstrap-sass-official/assets/stylesheets/_bootstrap.scss.\A        Load paths:\A          \A         on line 4 of main.scss\A \A 1: /* VENDOR - Default fall-backs and external files.\A 2: ========================================================================== */\A 3: \A 4: @import \"bootstrap-sass-official/assets/stylesheets/_bootstrap.scss\";\A 5: @import \"components-font-awesome/scss/font-awesome\";\A 6: \A 7: /* Variable\A 8: ========================================================================== */\A 9: @import \"_variables\";"; }

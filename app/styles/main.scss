@@ -4,13 +4,18 @@
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "components-font-awesome/scss/font-awesome";
 
-/* BASE - Base Variable file along with starting point Mixins and Placeholders.
+/* Variable
 ========================================================================== */
 @import "_variables";
 
+/* Layout
+========================================================================== */
+@import "_layout";
 
 
-@import "connection/dialer";
+/* components
+========================================================================== */
+@import "components/dialer";
 
 
 
