@@ -7,7 +7,7 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
     "        <label for=\"input-add\" class=\"sr-only\" translate>Add user</label>\n" +
     "        <div class=\"input-group\">\n" +
     "            <input type=\"text\" data-ng-model=\"connectId\" autocomplete=\"off\" placeholder=\"{{'Enter user name'|translate}}\" id=\"input-add\"\n" +
-    "                   class=\"form-control input-sm\">\n" +
+    "                   class=\"form-control input-sm\" required=\"true\">\n" +
     "            <span class=\"input-group-btn\">\n" +
     "              <button class=\"btn btn-success btn-sm un-connect-button-login\" type=\"button\" data-ng-click=\"connect()\"><i class=\"fa fa-plus\"></i>\n" +
     "              </button>\n" +
@@ -54,6 +54,7 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
     "            <div class=\"input-group\">\n" +
     "                <input type=\"text\"\n" +
     "                       data-ng-model=\"newPeerId\"\n" +
+    "                       required=\"true\"\n" +
     "                       class=\"form-control input-lg\" id=\"input-message\" placeholder=\"{{'Enter your phone number' | translate}}\"\n" +
     "                       autocomplete=\"off\">\n" +
     "                <span class=\"input-group-btn\">\n" +
