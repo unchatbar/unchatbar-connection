@@ -39,6 +39,16 @@ describe('Controller: dialer', function () {
 
                 expect(brokerService.connect).toHaveBeenCalledWith('test');
             });
+
+            it('should not call `broker.connect`, when `$scope.connectId` is empty', function () {
+                spyOn(brokerService, 'connect').and.returnValue('');
+                scope.connectId = '';
+
+                scope.connect();
+
+                expect(brokerService.connect).not.toHaveBeenCalled();
+            });
+
             it('should set `scope.connectId` to empty string ', function () {
                 spyOn(brokerService, 'connect').and.returnValue('');
                 scope.connectId = 'test';
@@ -47,6 +57,8 @@ describe('Controller: dialer', function () {
 
                 expect(scope.connectId).toBe('');
             });
+
+
         });
 
         describe('login', function () {
@@ -58,9 +70,19 @@ describe('Controller: dialer', function () {
 
                 expect(brokerService.setPeerId).toHaveBeenCalledWith('test');
             });
+
+            it('should call not `broker.setPeerId`, when `$scope.newPeerId` is empty', function () {
+                spyOn(brokerService, 'setPeerId').and.returnValue('');
+                scope.newPeerId = '';
+
+                scope.login();
+
+                expect(brokerService.setPeerId).not.toHaveBeenCalled();
+            });
+
             it('should call `broker.connectServer`', function () {
                 spyOn(brokerService, 'connectServer').and.returnValue('');
-                scope.connectId = 'test';
+                scope.newPeerId = 'test';
 
                 scope.login();
 
