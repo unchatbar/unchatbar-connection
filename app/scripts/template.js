@@ -58,7 +58,7 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
     "                       class=\"form-control input-lg\" id=\"input-message\" placeholder=\"{{'Enter your phone number' | translate}}\"\n" +
     "                       autocomplete=\"off\">\n" +
     "                <span class=\"input-group-btn\">\n" +
-    "                    <div ui-sref=\"chat\" class=\"btn btn-primary btn-lg\" data-ng-click=\"login();\">\n" +
+    "                    <div class=\"btn btn-primary btn-lg\" data-ng-click=\"login();\">\n" +
     "                        <i class=\"fa fa-sign-in\"></i>\n" +
     "                    </div>\n" +
     "                </span>\n" +
