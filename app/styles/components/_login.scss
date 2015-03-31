@@ -4,8 +4,38 @@
   max-width: 440px;
   padding: 0 15px;
   margin: 0 auto;
-  .page-header {
+  .login-header {
+    @extend .page-header;
     margin: 30px 0 20px;
     border-bottom-color: $blue;
+  }
+  .login-body {
+    form {
+      @extend .form-group;
+    }
+    label {
+      @extend .sr-only;
+    }
+    .login-group {
+      @extend .input-group;
+      input {
+        @extend .form-control, .input-lg;
+      }
+      .login-group-button {
+        @extend .input-group-btn;
+        .login-button {
+          @extend .btn, .btn-lg;
+          i {
+            @extend .fa, .fa-sign-in;
+          }
+        }
+        .active {
+          @extend .btn-primary;
+        }
+        .deactivate {
+          @extend .disabled;
+        }
+      }
+    }
   }
 }
