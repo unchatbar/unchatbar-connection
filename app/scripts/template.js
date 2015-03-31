@@ -3,13 +3,15 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
 
   $templateCache.put('views/unchatbar-connection/dialer.html',
     "<div class=\"un-connect-dialer\" data-ng-init=\"init()\" data-ng-show=\"peerId\">\n" +
-    "    <form ng-submit=\"connect()\" class=\"form-group\">\n" +
-    "        <label for=\"input-add\" class=\"sr-only\" translate>Add user</label>\n" +
-    "        <div class=\"input-group\">\n" +
+    "    <form ng-submit=\"connect()\">\n" +
+    "        <label for=\"input-add\" translate>Add user</label>\n" +
+    "        <div class=\"un-connect-dialer-input-group\">\n" +
     "            <input type=\"text\" data-ng-model=\"connectId\" autocomplete=\"off\" placeholder=\"{{'Enter user name'|translate}}\" id=\"input-add\"\n" +
-    "                   class=\"form-control input-sm\" required=\"true\">\n" +
-    "            <span class=\"input-group-btn\">\n" +
-    "              <button class=\"btn btn-success btn-sm un-connect-button-login\" type=\"button\" data-ng-click=\"connect()\"><i class=\"fa fa-plus\"></i>\n" +
+    "                   class=\"\" required=\"true\">\n" +
+    "            <span class=\"button-group\">\n" +
+    "              <button data-ng-disabled=\"!connectId\"\n" +
+    "                      type=\"button\" data-ng-click=\"connect()\">\n" +
+    "                  <i class=\"\"></i>\n" +
     "              </button>\n" +
     "            </span>\n" +
     "        </div>\n" +
@@ -46,25 +48,27 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
   $templateCache.put('views/unchatbar-connection/login.html',
     "<div class=\"login\">\n" +
     "    <div data-ng-show=\"!peerId\">\n" +
-    "        <div class=\"page-header\">\n" +
+    "        <div class=\"login-header\">\n" +
     "            <h2 translate>Please sign in</h2>\n" +
     "        </div>\n" +
-    "        <form class=\"form-group\">\n" +
-    "            <label class=\"sr-only\" for=\"input-message\" translate>Your phone number</label>\n" +
-    "            <div class=\"input-group\">\n" +
+    "        <div class=\"login-body\">\n" +
+    "        <form data-ng-submit=\"login()\">\n" +
+    "            <label for=\"input-message\" translate>Your phone number</label>\n" +
+    "            <div class=\"login-group\">\n" +
     "                <input type=\"text\"\n" +
     "                       data-ng-model=\"newPeerId\"\n" +
     "                       required=\"true\"\n" +
-    "                       class=\"form-control input-lg\" id=\"input-message\" placeholder=\"{{'Enter your phone number' | translate}}\"\n" +
+    "                       id=\"input-message\" placeholder=\"{{'Enter your phone number' | translate}}\"\n" +
     "                       autocomplete=\"off\">\n" +
-    "                <span class=\"input-group-btn\">\n" +
-    "                    <div class=\"btn btn-primary btn-lg\" data-ng-click=\"login();\">\n" +
-    "                        <i class=\"fa fa-sign-in\"></i>\n" +
+    "                <span class=\"login-group-button\">\n" +
+    "                    <div class=\"login-button\" data-ng-class=\"{'active' : newPeerId,'deactivate' : !newPeerId}\"\n" +
+    "                         data-ng-click=\"login();\">\n" +
+    "                        <i ></i>\n" +
     "                    </div>\n" +
     "                </span>\n" +
     "            </div>\n" +
-    "\n" +
     "        </form>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "</div>"
   );
