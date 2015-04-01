@@ -11,7 +11,7 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
     "            <span class=\"button-group\">\n" +
     "              <button data-ng-disabled=\"!connectId\"\n" +
     "                      type=\"button\" data-ng-click=\"connect()\">\n" +
-    "                  <i class=\"\"></i>\n" +
+    "                  <i></i>\n" +
     "              </button>\n" +
     "            </span>\n" +
     "        </div>\n" +
