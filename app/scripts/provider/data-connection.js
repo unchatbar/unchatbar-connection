@@ -41,10 +41,10 @@ angular.module('unchatbar-connection')
          *
          */
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker',
-            function ($rootScope, $localStorage, $sessionStorage, Broker  ) {
+            function ($rootScope, $localStorage, $sessionStorage, Broker) {
 
 
-                var api =  {
+                var api = {
 
                     /**
                      * @ngdoc methode
@@ -54,7 +54,7 @@ angular.module('unchatbar-connection')
                      * @returns {Object} connection storage
                      *
                      */
-                    _connectionMap : {},
+                    _connectionMap: {},
 
                     /**
                      * @ngdoc methode
@@ -94,7 +94,7 @@ angular.module('unchatbar-connection')
                      * get map of open connection
                      *
                      */
-                    getOpenConnectionMap : function(){
+                    getOpenConnectionMap: function () {
                         return this._connectionMap;
                     },
                     /**
@@ -142,11 +142,11 @@ angular.module('unchatbar-connection')
                             });
                         });
                         connection.on('data', function (data) {
-                            var  peerId = this.peer;
+                            var peerId = this.peer;
 
                             $rootScope.$apply(function () {
-                                if(data.action !== 'readMessage' && data.id) {
-                                    api._connectionMap[peerId].send(peerId, {action: 'readMessage',id: data.id})
+                                if (data.action !== 'readMessage' && data.id) {
+                                    api._connectionMap[peerId].send(peerId, {action: 'readMessage', id: data.id})
                                 }
                                 /**
                                  * @ngdoc event
@@ -182,11 +182,13 @@ angular.module('unchatbar-connection')
                      * send message to active room
                      *
                      */
-                    send: function (peerId,text,action,meta) {
+                    send: function (peerId, text, action, meta) {
+                        var messageId = null;
                         if (Broker.getPeerId() !== peerId) {
                             var message = {};
+                            messageId = this._createUUID();
                             message.text = text;
-                            message.id = this._createUUID();
+                            message.id = messageId;
                             message.action = action;
                             message.meta = meta || {};
 
@@ -196,7 +198,10 @@ angular.module('unchatbar-connection')
                                 Broker.connect(peerId);
                             }
                             this._addToQueue(peerId, message);
+
                         }
+                        return messageId;
+
                     },
 
                     /**
@@ -209,11 +214,12 @@ angular.module('unchatbar-connection')
                      * generate a uui id
                      *
                      */
-                    _createUUID : function() {
+                    _createUUID: function () {
                         function _p8(s) {
-                            var p = (Math.random().toString(16)+'000000000').substr(2,8);
-                            return s ? '-' + p.substr(0,4) + '-' + p.substr(4,4) : p ;
+                            var p = (Math.random().toString(16) + '000000000').substr(2, 8);
+                            return s ? '-' + p.substr(0, 4) + '-' + p.substr(4, 4) : p;
                         }
+
                         return _p8() + _p8(true) + _p8(true) + _p8();
 
                     },
@@ -232,8 +238,8 @@ angular.module('unchatbar-connection')
                     sendFromQueue: function (peerId) {
                         if (this._storage.queue[peerId]) {
                             _.forEach(this._storage.queue[peerId], function (message) {
-                                this._connectionMap[peerId].send( message);
-                                api.removeFromQueue(peerId,message.id)
+                                this._connectionMap[peerId].send(message);
+                                api.removeFromQueue(peerId, message.id)
                             }.bind(this));
                         }
                     },
@@ -250,7 +256,7 @@ angular.module('unchatbar-connection')
                      * send message from storage
                      *
                      */
-                    removeFromQueue: function (peerId,messageId) {
+                    removeFromQueue: function (peerId, messageId) {
                         if (this._storage.queue[peerId] &&
                             this._storage.queue[peerId][messageId]
                         ) {

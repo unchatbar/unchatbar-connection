@@ -161,6 +161,13 @@ describe('Serivce: dataConnection', function () {
                     'testPeerId', {text: 'myMessage', id: 'testUUID', action: 'testAction', meta: {meta: 'test'}}
                 );
             });
+
+            it('should `return message.id`', function () {
+                spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
+
+                expect(DataConnectionService.send('testPeerId', 'myMessage', 'testAction', {meta: 'test'})).toBe('testUUID');
+            });
+
             describe('connection-id exists', function () {
                 beforeEach(function () {
                     spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
