@@ -113,12 +113,12 @@ describe('Serivce: dataConnection', function () {
                     expect(connection.on).toHaveBeenCalledWith('data', jasmine.any(Function));
                 });
 
-                it('should call `Connection.send` with clientPeerId and action `readMessage`and message.id', function () {
+                it('should call `Connection.send` with  action `readMessage`and message.id', function () {
                     peerCallBack.data({
                         action: 'myAction',
                         id: 'UUID'
                     });
-                    expect(DataConnectionService._connectionMap.peerId.send).toHaveBeenCalledWith('peerId',
+                    expect(DataConnectionService._connectionMap.peerId.send).toHaveBeenCalledWith(
                         {action: 'readMessage', id: 'UUID'}
                     );
                 });

@@ -146,7 +146,7 @@ angular.module('unchatbar-connection')
 
                             $rootScope.$apply(function () {
                                 if (data.action !== 'readMessage' && data.id) {
-                                    api._connectionMap[peerId].send(peerId, {action: 'readMessage', id: data.id})
+                                    api._connectionMap[peerId].send({action: 'readMessage', id: data.id});
                                 }
                                 /**
                                  * @ngdoc event
