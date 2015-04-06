@@ -130,7 +130,7 @@ BrokerProvider.getPeerIdFromStorage();
 
 >
 ```javascript
-DataConnection.send([CLIENT-PEER-ID],[TEXT-MESSAGE],[ACTION-NAME],[METADATA]);
+DataConnection.send([CLIENT-PEER-ID],[ACTION-NAME],[METADATA]);
 ```
 
 

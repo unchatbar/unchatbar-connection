@@ -27,6 +27,7 @@ module.exports = function (config) {
             'bower_components/ngstorage/ngStorage.js',
             'bower_components/lodash/dist/lodash.compat.js',
             'bower_components/angular-gettext/dist/angular-gettext.js',
+            'bower_components/dexie/dist/latest/Dexie.min.js',
             // endbower
             'bower_components/angular-mocks/angular-mocks.js',
             'test/mock/views/**/*.html',

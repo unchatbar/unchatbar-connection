@@ -5,6 +5,38 @@ describe('Serivce: dataConnection', function () {
 
     beforeEach(module('unchatbar-connection'));
 
+    var mockDb = {
+        messages: {
+            where: function () {
+                return this;
+            },
+            equals: function () {
+                return this;
+            },
+            add: function () {
+            },
+            each: function () {
+            },
+            delete: function () {
+            },
+            count: function () {
+            }
+        },
+        queue: {
+            where: function () {
+                return this;
+            },
+            equals: function () {
+                return this;
+            },
+            add: function () {
+            },
+            each: function () {
+            },
+            delete: function () {
+            }
+        }
+    };
 
     beforeEach(inject(function ($rootScope, DataConnection, Broker, $sessionStorage) {
         rootScope = $rootScope;
@@ -13,6 +45,7 @@ describe('Serivce: dataConnection', function () {
         sessionStorage = $sessionStorage;
 
     }));
+
     describe('check init', function () {
         describe('_connectionMap', function () {
             it('should be an empty string', function () {
@@ -21,36 +54,67 @@ describe('Serivce: dataConnection', function () {
         });
         describe('_storage', function () {
             it('should be an empty string', function () {
-                expect(DataConnectionService._storage).toEqual({queue: {}});
+                expect(DataConnectionService._db).toBeNull();
             });
         });
     });
+
     describe('check methode', function () {
 
         describe('initStorage', function () {
-            var sessionStorage = {};
-            beforeEach(inject(function ($sessionStorage) {
-                sessionStorage = $sessionStorage;
-                spyOn(sessionStorage, '$default').and.returnValue({dataConnection: {test: 'data'}});
-                DataConnectionService.initStorage();
-            }));
-            it('should call `$sessionStorage.$default` with object', function () {
-                expect(sessionStorage.$default).toHaveBeenCalledWith({
-                    dataConnection: {
-                        queue: {}
+            var storageMock;
+            beforeEach(function () {
+                storageMock = {
+                    version: function () {
+                        return this;
+                    },
+                    stores: function () {
+                    },
+                    open: function () {
                     }
+                }
+                spyOn(window, 'Dexie').and.returnValue(storageMock);
+
+            });
+            it('should create Dexie object with `unTextChat`', function () {
+                DataConnectionService.initStorage();
+
+                expect(window.Dexie).toHaveBeenCalledWith('unConnection');
+            });
+            it('should call Dexie.version width DBVERSION', function () {
+                spyOn(storageMock, 'version').and.callThrough();
+                DataConnectionService.DBVERSION = 2;
+                DataConnectionService.initStorage();
+
+                expect(storageMock.version).toHaveBeenCalledWith(2);
+            });
+
+            it('should call Dexie.stores table message', function () {
+                spyOn(storageMock, 'stores').and.callThrough();
+
+                DataConnectionService.initStorage();
+
+                expect(storageMock.stores).toHaveBeenCalledWith({
+                    queue: "++id,messageId,receiver",
+                    messages: "++id,messageId,action,meta"
                 });
             });
-            it('should set  `DataConnectionService._storage` return value from `$sessionStorage.$default`', function () {
-                expect(DataConnectionService._storage).toEqual({test: 'data'});
+
+            it('should call Dexie.open', function () {
+                spyOn(storageMock, 'open').and.callThrough();
+                DataConnectionService.initStorage();
+
+                expect(storageMock.open).toHaveBeenCalled();
             });
         });
+
         describe('getOpenConnectionMap', function () {
-            it('should return `DataConnection._connectionMap' , function(){
-                DataConnectionService._connectionMap = {test:'data'};
-                expect(DataConnectionService.getOpenConnectionMap()).toEqual({test:'data'});
+            it('should return `DataConnection._connectionMap', function () {
+                DataConnectionService._connectionMap = {test: 'data'};
+                expect(DataConnectionService.getOpenConnectionMap()).toEqual({test: 'data'});
             });
         });
+
         describe('add', function () {
             var connection = {}, peerCallBack = {};
             beforeEach(function () {
@@ -98,14 +162,15 @@ describe('Serivce: dataConnection', function () {
 
                 it('should broadcast `dataConnectionClose`', function () {
                     peerCallBack.close();
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('dataConnectionClose',{});
+                    expect(rootScope.$broadcast).toHaveBeenCalledWith('dataConnectionClose', {});
                 });
             });
 
             describe('listener `data`', function () {
                 beforeEach(function () {
                     DataConnectionService._connectionMap.peerId = {
-                        send : function(){}
+                        send: function () {
+                        }
                     }
                     spyOn(DataConnectionService._connectionMap.peerId, 'send').and.returnValue(true);
                 });
@@ -116,7 +181,7 @@ describe('Serivce: dataConnection', function () {
                 it('should call `Connection.send` with  action `readMessage`and message.id', function () {
                     peerCallBack.data({
                         action: 'myAction',
-                        id: 'UUID'
+                        messageId: 'UUID'
                     });
                     expect(DataConnectionService._connectionMap.peerId.send).toHaveBeenCalledWith(
                         {action: 'readMessage', id: 'UUID'}
@@ -151,21 +216,36 @@ describe('Serivce: dataConnection', function () {
             });
             it('should not call `dataConnection._addToQueue` when peerId is equal own peer id', function () {
                 spyOn(BrokerService, 'getPeerId').and.returnValue('testPeerId');
-                DataConnectionService.send('testPeerId', 'myMessage', 'testAction', {meta: 'test'});
+                DataConnectionService.send('testPeerId', 'testAction', {meta: 'test'});
                 expect(DataConnectionService._addToQueue).not.toHaveBeenCalled();
             });
             it('should call `dataConnection._addToQueue` with peerId and message object', function () {
                 spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
-                DataConnectionService.send('testPeerId', 'myMessage', 'testAction', {meta: 'test'});
+                DataConnectionService.send('testPeerId', 'testAction', {meta: 'test'});
                 expect(DataConnectionService._addToQueue).toHaveBeenCalledWith(
-                    'testPeerId', {text: 'myMessage', id: 'testUUID', action: 'testAction', meta: {meta: 'test'}}
+                    'testPeerId', {messageId: 'testUUID', action: 'testAction', meta: {meta: 'test'}}
                 );
             });
 
-            it('should `return message.id`', function () {
+            it('should call `dataConnection._addToQueue`  width old messageId', function () {
+                spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
+                DataConnectionService.send('testPeerId', 'testAction', {meta: 'test'},'messageId');
+                expect(DataConnectionService._addToQueue).toHaveBeenCalledWith(
+                    'testPeerId', {messageId: 'messageId', action: 'testAction', meta: {meta: 'test'}}
+                );
+            });
+
+            it('should return `message.id`', function () {
                 spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
 
-                expect(DataConnectionService.send('testPeerId', 'myMessage', 'testAction', {meta: 'test'})).toBe('testUUID');
+                expect(DataConnectionService.send('testPeerId', 'testAction', {meta: 'test'})).toBe('testUUID');
+            });
+
+
+            it('should return old messageId`', function () {
+                spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
+
+                expect(DataConnectionService.send('testPeerId', 'testAction', {meta: 'test'},'oldMessageId')).toBe('oldMessageId');
             });
 
             describe('connection-id exists', function () {
@@ -183,12 +263,11 @@ describe('Serivce: dataConnection', function () {
 
                 });
                 it('should call send with message', function () {
-                    DataConnectionService.send('peerId', 'myMessage', 'testAction', {meta: 'test'});
+                    DataConnectionService.send('peerId', 'testAction', {meta: 'test'});
                     expect(DataConnectionService._connectionMap.peerId.send).toHaveBeenCalledWith(
                         {
-                            text: 'myMessage',
                             action: 'testAction',
-                            id: 'testUUID',
+                            messageId: 'testUUID',
                             meta: {meta: 'test'}
                         }
                     );
@@ -204,7 +283,7 @@ describe('Serivce: dataConnection', function () {
                 });
 
                 it('should call `Broker.connect` with peer ID', function () {
-                    DataConnectionService.send('peerId', 'myMessage', 'testAction', {meta: 'test'});
+                    DataConnectionService.send('peerId', 'testAction', {meta: 'test'});
 
                     expect(BrokerService.connect).toHaveBeenCalledWith('peerId');
                 });
@@ -212,81 +291,158 @@ describe('Serivce: dataConnection', function () {
         });
 
         describe('sendFromQueue', function () {
-            describe('peerId has no items in queue ', function () {
-                beforeEach(function () {
-                    DataConnectionService._storage.queue = {};
-                    spyOn(DataConnectionService, 'send').and.returnValue(true);
-
-                });
-                it('should not call `Connection.send` for message in storage queue', function () {
-
-                    DataConnectionService.sendFromQueue('peerId');
-
-                    expect(DataConnectionService.send).not.toHaveBeenCalled();
-                });
-            });
             describe('peerId has items in queue ', function () {
                 beforeEach(function () {
-                    DataConnectionService._storage.queue = {'peerId': ['message']};
-
                     DataConnectionService._connectionMap = {
-                        'peerId': {
-                            open: true,
-                            send: function (message) {
-                                return message;
+                        clientPeerId: {
+                            send: function () {
                             }
                         }
-                    };
-                    spyOn(DataConnectionService._connectionMap.peerId,'send').and.returnValue(true);
-                });
-                it('should not call `Connection.send` for message in storage queue', function () {
-                    DataConnectionService.sendFromQueue('peerId');
-                    expect(DataConnectionService._connectionMap.peerId.send).toHaveBeenCalledWith('message');
-                });
-            });
-        });
-
-        describe('removeFromQueue', function () {
-            it('should remove mesage from client', function () {
-                DataConnectionService._storage.queue = {
-                    peerId: {
-                        messageIdA: 'data',
-                        messageIdB: 'data'
                     }
-                };
-                DataConnectionService.removeFromQueue('peerId', 'messageIdA');
-
-                expect(DataConnectionService._storage.queue).toEqual({
-                    peerId: {
-                        messageIdB: 'data'
-                    }
+                    DataConnectionService._db = mockDb;
+                    spyOn(DataConnectionService._db.queue, 'where').and.callThrough();
+                    spyOn(DataConnectionService._db.queue, 'equals').and.callThrough();
+                    spyOn(DataConnectionService._db.queue, 'each').and.callFake(function (callBack) {
+                        callBack.call(this, {
+                            messageId: 'messageId',
+                            id: 'ownQueueId'
+                        });
+                    });
                 });
-            });
+                it('should call _db.queue.where with `sendID` ', function () {
+                    DataConnectionService.sendFromQueue('clientPeerId');
 
-            it('should remove client from queue', function () {
-                DataConnectionService._storage.queue = {
-                    peerId: {
-                        messageIdA: 'data'
-                    }
-                };
-                DataConnectionService.removeFromQueue('peerId', 'messageIdA');
+                    expect(DataConnectionService._db.queue.where).toHaveBeenCalledWith('receiver');
+                });
 
-                expect(DataConnectionService._storage.queue).toEqual({});
+                it('should call _db.queue.equals with argument `sendId` ', function () {
+                    DataConnectionService.sendFromQueue('clientPeerId');
+
+                    expect(DataConnectionService._db.queue.equals).toHaveBeenCalledWith('clientPeerId');
+                });
+
+                describe('after search in queue', function () {
+                    var deferCountMessage;
+                    beforeEach(inject(function ($q) {
+                        spyOn(DataConnectionService._db.messages, 'where').and.callThrough();
+                        spyOn(DataConnectionService._db.messages, 'equals').and.callThrough();
+                        spyOn(DataConnectionService._db.queue, 'delete').and.callThrough();
+                        spyOn(DataConnectionService._db.messages, 'delete').and.callThrough();
+                        spyOn(DataConnectionService._connectionMap.clientPeerId, 'send').and.returnValue(true);
+                        spyOn(DataConnectionService._db.messages, 'each').and.callFake(function (callBack) {
+                            callBack.call(this, {
+                                id: 'messageId'
+                            });
+                        });
+                        spyOn(DataConnectionService._db.messages, 'count').and.callFake(function(){
+                            deferCountMessage = $q.defer();
+                            return deferCountMessage.promise;
+                        });
+                        DataConnectionService.sendFromQueue('clientPeerId');
+                    }));
+                    it('should send message to client ', function () {
+
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._connectionMap.clientPeerId.send).toHaveBeenCalledWith({
+                            id: 'messageId'
+                        });
+                    });
+
+                    it('should call _db.messages.where with `sendID` ', function () {
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._db.messages.where).toHaveBeenCalledWith('messageId');
+                    });
+
+                    it('should call _db.messages.equals with argument `sendId` ', function () {
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._db.messages.equals).toHaveBeenCalledWith('messageId');
+                    });
+
+                    it('should call _db.messages.equals with argument `sendId` ', function () {
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._db.messages.equals).toHaveBeenCalledWith('messageId');
+                    });
+
+                    it('should call _db.queue.delete with queueId', function () {
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._db.queue.delete).toHaveBeenCalledWith('ownQueueId');
+                    });
+
+                    it('should call _db.message.delete, when message.count is 0', function () {
+                        deferCountMessage.resolve(0);
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._db.messages.delete).toHaveBeenCalledWith('messageId');
+                    });
+
+                    it('should not call _db.message.delete, when message.count is not 0', function () {
+                        deferCountMessage.resolve(1);
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._db.messages.delete).not.toHaveBeenCalled();
+                    });
+
+                });
+
+
             });
         });
 
         describe('_addToQueue', function () {
-            it('should push `_storageMessages.queue` to peerId key', function () {
-                DataConnectionService._storage.queue = {};
-                DataConnectionService._addToQueue('peerId', {id: 'UUId', test: 'data'});
-                expect(DataConnectionService._storage.queue).toEqual({
-                    'peerId': {
-                        UUId: {id: 'UUId', test: 'data'}
-                    }
+            var deferCountMessage;
+            beforeEach(inject(function ($q) {
+                DataConnectionService._db = mockDb;
+                spyOn(DataConnectionService._db.queue, 'add').and.callThrough();
+                spyOn(DataConnectionService._db.messages, 'where').and.callThrough();
+                spyOn(DataConnectionService._db.messages, 'equals').and.callThrough();
+                spyOn(DataConnectionService._db.messages, 'add').and.callThrough();
+                spyOn(DataConnectionService._db.messages, 'count').and.callFake(function(){
+                    deferCountMessage = $q.defer();
+                    return deferCountMessage.promise;
+                });
+            }));
+            it('should insert peerId and messageId into queue table', function () {
+                DataConnectionService._addToQueue('peerId', {messageId: 'messageId', test: 'data'});
+                expect(DataConnectionService._db.queue.add).toHaveBeenCalledWith({
+                    messageId:'messageId',
+                    receiver : 'peerId'
                 });
             });
-        });
 
+            it('should call _db.messages.where with `messageId` ', function () {
+                DataConnectionService._addToQueue('peerId', {messageId: 'messageId', test: 'data'});
+
+                expect(DataConnectionService._db.messages.where).toHaveBeenCalledWith('messageId');
+            });
+
+            it('should call _db.messages.equals with argument `messageId` ', function () {
+                DataConnectionService._addToQueue('peerId', {messageId: 'messageId', test: 'data'});
+
+                expect(DataConnectionService._db.messages.equals).toHaveBeenCalledWith('messageId');
+            });
+            describe('after count ' , function(){
+
+                it('should call add when messageId is not in messageTable' , function(){
+                    DataConnectionService._addToQueue('peerId', {messageId: 'messageId', test: 'data'});
+                    deferCountMessage.resolve(0);
+
+                    rootScope.$apply();
+
+                    expect(DataConnectionService._db.messages.add).toHaveBeenCalledWith({messageId: 'messageId', test: 'data'});
+                });
+                it('should not call add when messageId is in messageTable' , function(){
+                    DataConnectionService._addToQueue('peerId', {messageId: 'messageId', test: 'data'});
+                    deferCountMessage.resolve(1);
+                    rootScope.$apply();
+
+                    expect(DataConnectionService._db.messages.add).not.toHaveBeenCalled();
+                });
+            })
+        });
     });
-})
-;
+});

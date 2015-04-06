@@ -11,7 +11,8 @@
     "ngstorage": "~0.3.0",
     "lodash": "~2.4.1",
     "angular-gettext": "~2.0.3",
-    "components-font-awesome": "~4.3.0"
+    "components-font-awesome": "~4.3.0",
+    "dexie": "~1.0.4"
   },
   "ignore": [
     "bower_components/peerjs.bower.json"
