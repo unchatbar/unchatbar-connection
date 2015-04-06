@@ -164,7 +164,7 @@ angular.module('unchatbar-connection')
                 send: function (peerId, action, meta, messageId) {
                     var sendId = null, message = {};
 
-                    if (Broker.getPeerId() !== peerId) {
+                    if (Broker.getPeerId() && Broker.getPeerId() !== peerId) {
                         sendId = messageId || this._createUUID();
                         message.messageId = sendId;
                         message.action = action;
@@ -217,17 +217,36 @@ angular.module('unchatbar-connection')
                         this._db.messages.where("messageId").equals(queue.messageId).each(function (message) {
                             if (this._connectionMap[peerId]) {
                                 this._connectionMap[peerId].send(message);
-                                this._db.queue.delete(queue.id);
-                                this._db.messages.where("messageId").equals(queue.messageId).count().then(function (count) {
-                                    if (count === 0) {
-                                        this._db.messages.delete(message.id);
-                                    }
-                                }.bind(this));
                             }
                         }.bind(this));
                     }.bind(this));
                 },
 
+                /**
+                 * @ngdoc methode
+                 * @name removeFromQueue
+                 * @methodOf unchatbar-connection.DataConnection
+                 * @private
+                 * @params {String} peerId id of client
+                 * @returns {Object} messageId message id
+                 * @description
+                 *
+                 * store message, send send later
+                 *
+                 */
+                removeFromQueue: function (peerId, messageId) {
+                    this._db.queue.where("messageId").equals(messageId)
+                        .and(function (queueItem) {
+                            return queueItem.receiver === peerId;
+                        })
+                        .delete().then(function() {
+                            this._db.queue.where("messageId").equals(messageId).count().then(function (count) {
+                                if (count === 0) {
+                                    this._db.messages.where("messageId").equals(messageId).delete();
+                                }
+                            }.bind(this));
+                        }.bind(this));
+                },
                 /**
                  * @ngdoc methode
                  * @name _addToQueue
@@ -241,9 +260,9 @@ angular.module('unchatbar-connection')
                  *
                  */
                 _addToQueue: function (peerId, message) {
-                    this._db.queue.add({messageId:message.messageId,receiver : peerId});
+                    this._db.queue.add({messageId: message.messageId, receiver: peerId});
                     this._db.messages.where("messageId").equals(message.messageId).count().then(function (count) {
-                        if(count === 0) {
+                        if (count === 0) {
                             this._db.messages.add(message);
                         }
                     }.bind(this));

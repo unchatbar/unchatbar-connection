@@ -14,6 +14,7 @@ describe('Serivce: dataConnection', function () {
                 return this;
             },
             add: function () {
+                return this;
             },
             each: function () {
             },
@@ -29,11 +30,16 @@ describe('Serivce: dataConnection', function () {
             equals: function () {
                 return this;
             },
+            and: function () {
+                return this;
+            },
             add: function () {
             },
             each: function () {
             },
             delete: function () {
+            },
+            count: function () {
             }
         }
     };
@@ -327,7 +333,7 @@ describe('Serivce: dataConnection', function () {
                         spyOn(DataConnectionService._db.messages, 'where').and.callThrough();
                         spyOn(DataConnectionService._db.messages, 'equals').and.callThrough();
                         spyOn(DataConnectionService._db.queue, 'delete').and.callThrough();
-                        spyOn(DataConnectionService._db.messages, 'delete').and.callThrough();
+
                         spyOn(DataConnectionService._connectionMap.clientPeerId, 'send').and.returnValue(true);
                         spyOn(DataConnectionService._db.messages, 'each').and.callFake(function (callBack) {
                             callBack.call(this, {
@@ -367,31 +373,142 @@ describe('Serivce: dataConnection', function () {
                         expect(DataConnectionService._db.messages.equals).toHaveBeenCalledWith('messageId');
                     });
 
-                    it('should call _db.queue.delete with queueId', function () {
-                        rootScope.$apply();
 
-                        expect(DataConnectionService._db.queue.delete).toHaveBeenCalledWith('ownQueueId');
-                    });
-
-                    it('should call _db.message.delete, when message.count is 0', function () {
-                        deferCountMessage.resolve(0);
-                        rootScope.$apply();
-
-                        expect(DataConnectionService._db.messages.delete).toHaveBeenCalledWith('messageId');
-                    });
-
-                    it('should not call _db.message.delete, when message.count is not 0', function () {
-                        deferCountMessage.resolve(1);
-                        rootScope.$apply();
-
-                        expect(DataConnectionService._db.messages.delete).not.toHaveBeenCalled();
-                    });
 
                 });
 
 
             });
         });
+
+        describe('removeFromQueue' , function(){
+            describe('after search in queue', function () {
+                beforeEach(inject(function ($q) {
+                    DataConnectionService._db = mockDb;
+                    spyOn(DataConnectionService._db.queue, 'where').and.callThrough();
+                    spyOn(DataConnectionService._db.queue, 'equals').and.callThrough();
+
+                    spyOn(DataConnectionService._db.queue, 'delete').and.callFake(function(){
+                        var defer = $q.defer();
+                        defer.resolve();
+                        return defer.promise;
+                    });
+
+                }));
+                it('should `_db.queue.where` width `messageId` ', function () {
+                    spyOn(DataConnectionService._db.queue, 'and').and.callFake(function(callback){
+                        return this;
+                    });
+                    DataConnectionService.removeFromQueue('clientPeerId','messageId');
+
+                    expect(DataConnectionService._db.queue.where).toHaveBeenCalledWith('messageId');
+                });
+
+                it('should `_db.queue.equals` width argument `messageId` ', function () {
+                    spyOn(DataConnectionService._db.queue, 'and').and.callFake(function(callback){
+                        return this;
+                    });
+                    DataConnectionService.removeFromQueue('clientPeerId','messageId');
+
+                    expect(DataConnectionService._db.queue.equals).toHaveBeenCalledWith('messageId');
+                });
+
+                it('should return true from `and` when peerId is receiver ', function () {
+                    var isPeerReceiver;
+                    spyOn(DataConnectionService._db.queue, 'and').and.callFake(function(callback){
+                        isPeerReceiver = callback.call(this,{receiver:'clientPeerId'});
+                        return this;
+                    });
+                    DataConnectionService.removeFromQueue('clientPeerId','messageId');
+
+                    expect(isPeerReceiver).toBe(true);
+                });
+
+                it('should return false from `and` when peerId is not receiver ', function () {
+                    var isPeerReceiver;
+                    spyOn(DataConnectionService._db.queue, 'and').and.callFake(function(callback){
+                        isPeerReceiver = callback.call(this,{receiver:'clientPeerIdOther'});
+                        return this;
+                    });
+                    DataConnectionService.removeFromQueue('clientPeerId','messageId');
+
+                    expect(isPeerReceiver).toBe(false);
+                });
+
+                it('should call `_db.queue.delete` ', function () {
+                    spyOn(DataConnectionService._db.queue, 'and').and.callFake(function(callback){
+                        return this;
+                    });
+                    DataConnectionService.removeFromQueue('clientPeerId','messageId');
+
+                    expect(DataConnectionService._db.queue.delete).toHaveBeenCalled();
+                });
+
+                describe('after resolve this._db.queue.delete' , function(){
+                   var deferQueueCount;
+                    beforeEach(inject(function($q){
+                       spyOn(DataConnectionService._db.queue, 'and').and.callFake(function(callback){
+                           return this;
+                       });
+                       DataConnectionService.removeFromQueue('clientPeerId','messageId');
+                       DataConnectionService._db.queue.where.calls.reset();
+                       DataConnectionService._db.queue.equals.calls.reset();
+                        spyOn(DataConnectionService._db.messages, 'where').and.callThrough();
+                        spyOn(DataConnectionService._db.messages, 'equals').and.callThrough();
+                        spyOn(DataConnectionService._db.messages, 'delete').and.callThrough();
+
+                        spyOn(DataConnectionService._db.queue, 'count').and.callFake(function(){
+                          deferQueueCount = $q.defer();
+                          return deferQueueCount.promise;
+                       });
+                   }));
+                   it('should `_db.queue.where` width `messageId` ', function () {
+                        rootScope.$apply();
+                        expect(DataConnectionService._db.queue.where).toHaveBeenCalledWith('messageId');
+                   });
+
+                   it('should `_db.queue.equals` width argument `messageId` ', function () {
+                        rootScope.$apply();
+
+                        expect(DataConnectionService._db.queue.equals).toHaveBeenCalledWith('messageId');
+                   });
+                   describe('no messageId exists in queue' , function(){
+                       beforeEach(function(){
+                           rootScope.$apply();
+                           deferQueueCount.resolve(0);
+                       });
+                       it('should call `_db.queue.where` width `messageId` ', function () {
+                           rootScope.$apply();
+                           expect(DataConnectionService._db.messages.where).toHaveBeenCalledWith('messageId');
+                       });
+
+                       it('should call `_db.queue.equals` width argument `messageId` ', function () {
+                           rootScope.$apply();
+
+                           expect(DataConnectionService._db.messages.equals).toHaveBeenCalledWith('messageId');
+                       });
+
+                       it('should call `_db.queue.where` width `messageId` ', function () {
+                           rootScope.$apply();
+                           expect(DataConnectionService._db.messages.delete).toHaveBeenCalled();
+                       });
+                   });
+                    describe('no messageId exists in queue' , function() {
+                        beforeEach(function () {
+                            rootScope.$apply();
+                            deferQueueCount.resolve(1);
+                        });
+                        it('should not call `_db.queue.where` ', function () {
+                            rootScope.$apply();
+                            expect(DataConnectionService._db.messages.where).not.toHaveBeenCalled();
+                        });
+                    });
+
+                });
+
+            });
+
+        })
 
         describe('_addToQueue', function () {
             var deferCountMessage;
