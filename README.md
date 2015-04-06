@@ -77,12 +77,6 @@ BrokerProvider.setPath([PATH]);
 BrokerProvider.setLocalStorage([TRUE/FALSE]);
 ```
 
-* define use lcoal storage, for store outstanding messages
-
->
-```javascript
-DataConnectionProvider.setLocalStorage([TRUE/FALSE]);
-```
 
 ## Usage
 
