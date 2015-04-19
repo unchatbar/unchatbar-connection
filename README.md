@@ -24,6 +24,7 @@ Peer to peer chat application using WebRTC technologies
 * lodash
 * peerjs
 * unchatbar-user
+* gettext
 
 ## Get Started
 ```javascript
