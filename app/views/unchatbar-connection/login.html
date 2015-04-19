@@ -4,22 +4,30 @@
             <h2 translate>Please sign in</h2>
         </div>
         <div class="login-body">
-        <form data-ng-submit="login()">
-            <label for="input-message" translate>Your phone number</label>
-            <div class="login-group">
-                <input type="text"
-                       data-ng-model="newPeerId"
-                       required="true"
-                       id="input-message" placeholder="{{'Enter your phone number' | translate}}"
-                       autocomplete="off">
+            <form data-ng-submit="login()" name="loginForm">
+                <label for="input-message" translate>Your phone number</label>
+
+                <div class="login-group">
+                    <input type="text"
+                           data-ng-model="newPeerId"
+                           required="true"
+                           name="newPeerId"
+                           data-ng-pattern="/^[a-zA-Z0-9]*$/"
+                           id="input-message" placeholder="{{'Enter your phone number' | translate}}"
+                           autocomplete="off">
+
+
                 <span class="login-group-button">
                     <div class="login-button" data-ng-class="{'active' : newPeerId,'deactivate' : !newPeerId}"
                          data-ng-click="login();">
-                        <i ></i>
+                        <i></i>
                     </div>
                 </span>
-            </div>
-        </form>
+                </div>
+                <div class="alert alert-danger" ng-show="loginForm.newPeerId.$error.pattern" translate>
+                    only Words/Numbers are allowed
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -20,7 +20,7 @@ msgstr ""
 msgid "Enter your password"
 msgstr ""
 
-#: app/views/unchatbar-connection/login.html:11
+#: app/views/unchatbar-connection/login.html:15
 msgid "Enter your phone number"
 msgstr ""
 
@@ -43,8 +43,12 @@ msgid ""
 "        If this this phone-number is yours, please insert the correct password."
 msgstr ""
 
-#: app/views/unchatbar-connection/login.html:7
+#: app/views/unchatbar-connection/login.html:8
 msgid "Your phone number"
+msgstr ""
+
+#: app/views/unchatbar-connection/login.html:17
+msgid "only Words/Numbers are allowed"
 msgstr ""
 
 #: app/views/unchatbar-connection/failed-login.html:19

@@ -23,12 +23,13 @@ angular.module('unchatbar-connection')
                  *
                  */
                 _connectionMap: {},
+
                 /**
                  * @ngdoc methode
                  * @name _db
-                 * @propertyOf unchatbar-data-chat.DataConnection
+                 * @propertyOf unchatbar-connection.DataConnection
                  * @private
-                 * @returns {Object} databse connector
+                 * @returns {Object} database connector
                  *
                  */
                 _db: null,
@@ -36,9 +37,9 @@ angular.module('unchatbar-connection')
                 /**
                  * @ngdoc methode
                  * @name DBVERSION
-                 * @propertyOf unchatbar-data-chat.DataConnection
+                 * @propertyOf unchatbar-connection.DataConnection
                  * @private
-                 * @returns {Number} databse version
+                 * @returns {Number} database version
                  *
                  */
                 DBVERSION: 1,

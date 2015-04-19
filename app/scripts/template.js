@@ -52,22 +52,30 @@ angular.module('unchatbar-connection').run(['$templateCache', function($template
     "            <h2 translate>Please sign in</h2>\n" +
     "        </div>\n" +
     "        <div class=\"login-body\">\n" +
-    "        <form data-ng-submit=\"login()\">\n" +
-    "            <label for=\"input-message\" translate>Your phone number</label>\n" +
-    "            <div class=\"login-group\">\n" +
-    "                <input type=\"text\"\n" +
-    "                       data-ng-model=\"newPeerId\"\n" +
-    "                       required=\"true\"\n" +
-    "                       id=\"input-message\" placeholder=\"{{'Enter your phone number' | translate}}\"\n" +
-    "                       autocomplete=\"off\">\n" +
+    "            <form data-ng-submit=\"login()\" name=\"loginForm\">\n" +
+    "                <label for=\"input-message\" translate>Your phone number</label>\n" +
+    "\n" +
+    "                <div class=\"login-group\">\n" +
+    "                    <input type=\"text\"\n" +
+    "                           data-ng-model=\"newPeerId\"\n" +
+    "                           required=\"true\"\n" +
+    "                           name=\"newPeerId\"\n" +
+    "                           data-ng-pattern=\"/^[a-zA-Z0-9]*$/\"\n" +
+    "                           id=\"input-message\" placeholder=\"{{'Enter your phone number' | translate}}\"\n" +
+    "                           autocomplete=\"off\">\n" +
+    "\n" +
+    "\n" +
     "                <span class=\"login-group-button\">\n" +
     "                    <div class=\"login-button\" data-ng-class=\"{'active' : newPeerId,'deactivate' : !newPeerId}\"\n" +
     "                         data-ng-click=\"login();\">\n" +
-    "                        <i ></i>\n" +
+    "                        <i></i>\n" +
     "                    </div>\n" +
     "                </span>\n" +
-    "            </div>\n" +
-    "        </form>\n" +
+    "                </div>\n" +
+    "                <div class=\"alert alert-danger\" ng-show=\"loginForm.newPeerId.$error.pattern\" translate>\n" +
+    "                    only Words/Numbers are allowed\n" +
+    "                </div>\n" +
+    "            </form>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>"
