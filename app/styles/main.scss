@@ -1,10 +1,11 @@
-/* VENDOR - Default fall-backs and external files.
+/* Vendors
 ========================================================================== */
-
+// bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-@import "components-font-awesome/scss/font-awesome";
+@import "components-font-awesome/scss/font-awesome.scss";
+// endbower
 
-/* Variable
+/* Variables
 ========================================================================== */
 @import "_variables";
 
@@ -12,11 +13,7 @@
 ========================================================================== */
 @import "_layout";
 
-
-/* components
+/* Components
 ========================================================================== */
 @import "components/_login";
 @import "components/_dialer";
-
-
-
