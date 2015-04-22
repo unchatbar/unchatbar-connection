@@ -21,13 +21,13 @@ module.exports = function (config) {
             // bower:
             'bower_components/es5-shim/es5-shim.js',
             'bower_components/angular/angular.js',
-            'bower_components/json3/lib/json3.js',
-            'bower_components/peerjs/peer.js',
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-            'bower_components/ngstorage/ngStorage.js',
-            'bower_components/lodash/dist/lodash.compat.js',
             'bower_components/angular-gettext/dist/angular-gettext.js',
             'bower_components/dexie/dist/latest/Dexie.min.js',
+            'bower_components/json3/lib/json3.js',
+            'bower_components/lodash/dist/lodash.compat.js',
+            'bower_components/ngstorage/ngStorage.js',
+            'bower_components/peerjs/peer.js',
             // endbower
             'bower_components/angular-mocks/angular-mocks.js',
             'test/mock/views/**/*.html',

@@ -1,19 +1,10 @@
-/* Vendors
+/* Vendor
 ========================================================================== */
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "components-font-awesome/scss/font-awesome.scss";
 // endbower
 
-/* Variables
-========================================================================== */
-@import "variables";
-
-/* Layout
-========================================================================== */
-@import "layout";
-
 /* Components
 ========================================================================== */
-@import "components/login";
-@import "components/dialer";
+@import "components";

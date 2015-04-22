@@ -2,27 +2,32 @@
   form {
     @extend .form-group;
   }
+
   label {
     @extend .sr-only;
   }
+
   .un-connect-dialer-input-group {
     @extend .input-group;
+
     input {
       @extend .form-control, .input-sm;
     }
+
     .button-group {
       @extend .input-group-btn;
+
       button {
-        @extend .btn,.btn-sm;
+        @extend .btn, .btn-sm;
+
         i {
           @extend .fa, .fa-plus;
         }
-
       }
+
       button:enabled {
-        @extend  .btn-success;
+        @extend .btn-success;
       }
-
     }
   }
 }
