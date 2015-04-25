@@ -17,7 +17,7 @@ Bugfix:
 * handle offline/close/disconnect Broker Server
 
 Feature:
-* add client in dailer by enter event
+* add client in dailer by enter evencd ..t
 
 ## 0.0.6
 Bugfix:
