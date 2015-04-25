@@ -15,9 +15,14 @@ angular.module('unchatbar-connection').directive('unConnectionDialer', [
     function ( ) {
         return {
             restrict: 'E',
-            templateUrl: 'views/unchatbar-connection/dialer.html',
+            templateUrl: function(element,scope){
+                return scope.customTemplateUrl || 'views/unchatbar-connection/dialer.html';
+            },
             controller: 'dialer',
             transclude: true,
+            scope : {
+                customTemplateUrl: '@'
+            },
             link : function(scope){
                 scope.$on('BrokerPeerOpen', function () {
                     scope.getPeerId();

@@ -15,7 +15,12 @@ angular.module('unchatbar-connection').directive('unConnectionAuthentication', [
     function ( ) {
         return {
             restrict: 'E',
-            templateUrl: 'views/unchatbar-connection/login.html',
+            templateUrl: function(element,scope){
+                return scope.customTemplateUrl || 'views/unchatbar-connection/login.html';
+            },
+            scope : {
+                customTemplateUrl: '@'
+            },
             controller: 'dialer',
             transclude: true
         };

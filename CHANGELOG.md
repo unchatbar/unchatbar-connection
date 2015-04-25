@@ -1,3 +1,7 @@
+## 0.1.6
+Feature:
+* add custom template Path for directive
+
 ## 0.1.0
 Feature:
 * add sass

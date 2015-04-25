@@ -144,14 +144,14 @@ DataConnection.getOpenConnectionMap();
 
 >
 ```html
-<un-connection-dialer></un-connection-dialer>
+<un-connection-dialer data-custom-template-url="[CUSTOM-TEMPLATEPATH]"></un-connection-dialer>
 ```
 
 * Broker login from
 
 >
 ```html
-<un-connection-authentication></un-connection-authentication>
+<un-connection-authentication data-custom-template-url="[CUSTOM-TEMPLATEPATH]"></un-connection-authentication>
 ```
 
 ## Events
